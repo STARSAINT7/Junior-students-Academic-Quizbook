@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Quizbook - Junior Class (50 Questions)</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1d0936, #4b1248, #f0426b);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 20px;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Main Card Container */
+    .app-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Header & Animated Titles */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+      letter-spacing: 1px;
+    }
+
+    .creator-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 6px 16px;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Floating Pop-Up Banner */
+    .popup-banner {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffea00;
+      color: #000;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: popDown 8s ease-in-out infinite;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
+    @keyframes popDown {
+      0%, 80%, 100% { top: -60px; }
+      15%, 65% { top: 12px; }
+    }
+
+    /* Stage / Class Badge */
+    .stage-badge {
+      display: inline-block;
+      background: #00f2fe;
+      color: #000;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    /* Input Controls */
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #00f2fe;
+      font-size: 1rem;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .name-input:focus {
+      border-color: #00f2fe;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    }
+
+    /* Screens */
+    .start-screen, .subject-screen {
+      text-align: center;
+      padding: 10px 10px;
+    }
+
+    .start-screen h2, .subject-screen h2 {
+      font-size: 1.8rem;
+      color: #00f2fe;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .info-box li {
+      margin-bottom: 10px;
+      list-style-type: none;
+      font-size: 0.95rem;
+    }
+
+    .mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .mode-buttons::-webkit-scrollbar {
+      width: 6px;
+    }
+    .mode-buttons::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .start-btn {
+      background: linear-gradient(90deg, #00ff87, #60efff);
+      color: #000;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0, 255, 135, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 255, 135, 0.7);
+    }
+
+    .btn-back {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      margin-top: 15px;
+    }
+
+    /* Timer Bar & Info */
+    .timer-badge {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00f2fe;
+      color: #00f2fe;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-align: center;
+      padding: 8px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .progress-container {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      height: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      height: 100%;
+      width: 1%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-info {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #ffe600;
+    }
+
+    /* Question & Options */
+    .quiz-screen {
+      display: none;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      min-height: 50px;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 16px;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .option-btn:hover:not([disabled]) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .option-btn.correct {
+      background: #00e676 !important;
+      border-color: #ffffff !important;
+      color: #000 !important;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00e676;
+    }
+
+    .option-btn.wrong {
+      background: #ff1744 !important;
+      border-color: #ffffff !important;
+      color: #fff !important;
+      box-shadow: 0 0 12px #ff1744;
+    }
+
+    .nav-btns {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:active { transform: scale(0.95); }
+
+    .btn-prev { background: rgba(255, 255, 255, 0.2); color: #fff; }
+    .btn-next { background: #00f2fe; color: #000; }
+    .btn-submit { background: #00ff87; color: #000; }
+
+    .score-screen {
+      text-align: center;
+      display: none;
+    }
+
+    .score-badge {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #ffe600;
+      text-shadow: 0 0 20px rgba(255, 230, 0, 0.6);
+      margin: 15px 0;
+    }
+
+    .action-btn {
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      color: #fff;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 10px 5px 0 5px;
+    }
+
+    @media (max-width: 600px) {
+      .app-card {
+        padding: 20px 15px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .question-text {
+        font-size: 1.05rem;
+      }
+      .btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+    }
+  
+    /* In-page dialog (works even where the browser blocks alert/confirm pop-ups) */
+    .dialog-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .dialog-box {
+      background: #2b1240;
+      border: 2px solid #00f2fe;
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+    .dialog-box p { margin: 0 0 20px 0; font-size: 1.05rem; line-height: 1.5; }
+    .dialog-actions { display: flex; gap: 10px; justify-content: center; }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <div class="popup-banner">✨🎓 JUNIOR CLASS ACADEMIC QUIZBOOK 🎓✨</div>
+
+    <header>
+      <h1>Academic Quizbook</h1>
+      <div class="creator-badge">DEVELOPED BY EVANG. THANKGOD OKODUWA</div>
+    </header>
+
+    <!-- Start / Landing Screen -->
+    <div class="start-screen" id="start-screen">
+      <h2>Welcome, Junior Class Student</h2>
+      
+      <div class="input-group">
+        <label for="player-name">Enter Student Name:</label>
+        <input type="text" id="player-name" class="name-input" placeholder="e.g Osemhen Okoduwa" autocomplete="off">
+      </div>
+
+      <div class="info-box">
+        <ul>
+          <li>📚 <strong>14 Subjects Available:</strong> Mathematics, English Language, General Science, Social Studies, Basic Technology, Computer Studies, Civic Education, Agricultural Science, Home Economics, Physical & Health Education, music, French, CRS, and Business Studies.</li>
+          <li>📝 <strong>50 Distinct Questions</strong> per subject.</li>
+          <li>⏱️ <strong>Time Limit:</strong> 30 Minutes per subject test.</li>
+        </ul>
+      </div>
+
+      <div class="mode-buttons">
+        <button class="start-btn" onclick="openSubjectSelection()">ENTER JUNIOR CLASS</button>
+      </div>
+    </div>
+
+    <!-- Subject Selection Screen -->
+    <div class="subject-screen" id="subject-screen" style="display: none;">
+      <h2>Select a Subject</h2>
+      <p style="margin-bottom: 15px; color: #ffe600;">Choose from the 14 subjects below (50 Questions each):</p>
+
+      <div class="mode-buttons" id="subject-buttons-container">
+        <!-- 14 Subjects rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div class="quiz-screen" id="quiz-screen">
+      <div style="text-align: center; margin-bottom: 10px;">
+        <span class="stage-badge" id="current-stage-tag">JUNIOR CLASS</span>
+      </div>
+      <div class="timer-badge" id="timer-display">⏱ Time Remaining: 30:00</div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="quiz-info">
+        <span id="question-count">Question 1 of 50</span>
+        <span id="score-tracker">Score: 0</span>
+      </div>
+
+      <div class="question-text" id="question-text">Loading question...</div>
+
+      <div class="options-grid" id="options-container"></div>
+
+      <div class="nav-btns">
+        <button class="btn btn-prev" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+        <button class="btn btn-submit" onclick="confirmSubmit()">Submit Quiz</button>
+        <button class="btn btn-next" id="next-btn" onclick="changeQuestion(1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div class="score-screen" id="score-screen">
+      <h2 id="stage-result-title">Quiz Completed! 🎉</h2>
+      <p style="margin-top: 10px; font-size: 1.1rem;">Thank you for completing the test!</p>
+      
+      <div class="score-badge" id="final-score">0 / 50</div>
+
+      <p id="feedback-text" style="font-size: 1.2rem; font-weight: 600; line-height: 1.4; padding: 0 10px;"></p>
+      <p style="margin-top: 15px; color: #ffea00;">Junior Class Quizbook Application</p>
+
+      <div id="action-buttons-container">
+        <button class="action-btn" onclick="restartQuiz()">Choose Another Subject</button>
+      </div>
+    </div>
+  </div>
+
+    <div id="dialog-overlay" class="dialog-overlay">
+    <div class="dialog-box">
+      <p id="dialog-message"></p>
+      <div class="dialog-actions">
+        <button id="dialog-no" class="btn btn-prev">Cancel</button>
+        <button id="dialog-yes" class="btn btn-submit">OK</button>
+      </div>
+    </div>
+  </div>
+<script>
+    // Full 50 distinct questions database for all 14 Junior Class subjects
+    const juniorClassSubjects = {
+      "Mathematics": [
+        { q: "Simplify: −7 + (−5) − (−12)", options: ["0", "−24", "−10", "24"], answer: 0 },
+        { q: "Evaluate: 3 × (−4)² − 20 ÷ 5", options: ["12", "44", "68", "−4"], answer: 1 },
+        { q: "Find the HCF of 84 and 126.", options: ["42", "252", "14", "21"], answer: 0 },
+        { q: "Find the LCM of 12, 18 and 30.", options: ["360", "60", "180", "90"], answer: 2 },
+        { q: "Express 0.00045 in standard form.", options: ["4.5 × 10⁻³", "4.5 × 10⁴", "4.5 × 10⁻⁴", "45 × 10⁻⁵"], answer: 2 },
+        { q: "Simplify: 2⁵ × 2³ ÷ 2⁴", options: ["64", "8", "32", "16"], answer: 3 },
+        { q: "Simplify: 3x + 5y − x + 2y", options: ["4x + 7y", "2x + 7y", "2x + 3y", "9xy"], answer: 1 },
+        { q: "Expand: 3(2a − 5)", options: ["6a − 5", "6a + 15", "5a − 15", "6a − 15"], answer: 3 },
+        { q: "Factorise completely: 12x + 18", options: ["2(6x + 9)", "3(4x + 6)", "6(2x + 18)", "6(2x + 3)"], answer: 3 },
+        { q: "Solve for x: 5x − 8 = 3x + 14", options: ["22", "11", "7", "3"], answer: 1 },
+        { q: "Solve for y: (y + 3)/2 = 7", options: ["11", "17", "4", "10"], answer: 0 },
+        { q: "If 3x + 2y = 16 and x = 4, find y.", options: ["−2", "2", "8", "4"], answer: 1 },
+        { q: "Make a the subject of the formula: v = u + at", options: ["a = (v + u)/t", "a = (v − u)/t", "a = v − u + t", "a = t(v − u)"], answer: 1 },
+        { q: "The sum of three consecutive whole numbers is 87. Find the largest.", options: ["27", "31", "28", "30"], answer: 3 },
+        { q: "Express 7/8 as a decimal.", options: ["0.78", "0.875", "0.825", "0.87"], answer: 1 },
+        { q: "Work out: 2¾ + 1⅚", options: ["3 7/12", "4 7/12", "3 1/12", "4 5/8"], answer: 1 },
+        { q: "Work out: 3/4 ÷ 9/10", options: ["27/40", "2 7/10", "5/6", "6/5"], answer: 2 },
+        { q: "Express 36 : 48 : 60 in its simplest form.", options: ["9 : 12 : 15", "2 : 3 : 4", "6 : 8 : 10", "3 : 4 : 5"], answer: 3 },
+        { q: "₦45,000 is divided among A, B and C in the ratio 2 : 3 : 4. How much does B get?", options: ["₦22,500", "₦15,000", "₦10,000", "₦20,000"], answer: 1 },
+        { q: "A trader buys a bag of rice for ₦38,000 and sells it for ₦45,600. Find his percentage profit.", options: ["16.7%", "7.6%", "25%", "20%"], answer: 3 },
+        { q: "A phone costing ₦80,000 is sold at a loss of 12½%. What is the selling price?", options: ["₦90,000", "₦72,000", "₦70,000", "₦68,000"], answer: 2 },
+        { q: "Find the simple interest on ₦150,000 at 8% per annum for 2½ years.", options: ["₦30,000", "₦36,000", "₦24,000", "₦40,000"], answer: 0 },
+        { q: "If 12 men can build a wall in 15 days, how many days will 20 men take?", options: ["12", "25", "9", "10"], answer: 2 },
+        { q: "y varies directly as x. If y = 12 when x = 4, find y when x = 9.", options: ["36", "27", "18", "24"], answer: 1 },
+        { q: "The angles of a triangle are x°, 2x° and 3x°. Find x.", options: ["36", "30", "20", "60"], answer: 1 },
+        { q: "Each interior angle of a regular hexagon is:", options: ["60°", "108°", "120°", "135°"], answer: 2 },
+        { q: "The sum of the interior angles of an octagon is:", options: ["720°", "1,080°", "1,440°", "900°"], answer: 1 },
+        { q: "Two parallel lines are cut by a transversal. If one alternate angle is 65°, the other alternate angle is:", options: ["25°", "115°", "130°", "65°"], answer: 3 },
+        { q: "Find the hypotenuse of a right-angled triangle with sides 9 cm and 12 cm.", options: ["21 cm", "17 cm", "15 cm", "13 cm"], answer: 2 },
+        { q: "Find the area of a trapezium with parallel sides 8 cm and 14 cm and height 6 cm.", options: ["132 cm²", "66 cm²", "84 cm²", "48 cm²"], answer: 1 },
+        { q: "Using π = 22/7, find the area of a circle of diameter 28 cm.", options: ["616 cm²", "176 cm²", "308 cm²", "2,464 cm²"], answer: 0 },
+        { q: "Find the volume of a cylinder of radius 7 cm and height 10 cm (π = 22/7).", options: ["154 cm³", "3,080 cm³", "440 cm³", "1,540 cm³"], answer: 3 },
+        { q: "A cuboid 10 cm by 6 cm by 5 cm has a total surface area of:", options: ["240 cm²", "140 cm²", "280 cm²", "300 cm²"], answer: 2 },
+        { q: "Find the mean of 14, 18, 22, 16 and 30.", options: ["18", "16", "20", "22"], answer: 2 },
+        { q: "Find the median of 12, 7, 9, 15, 10, 8.", options: ["10", "9.5", "10.2", "9"], answer: 1 },
+        { q: "The mode of 3, 5, 5, 7, 8, 5, 9, 7 is:", options: ["7", "8", "6", "5"], answer: 3 },
+        { q: "A fair die is thrown once. What is the probability of getting a prime number?", options: ["2/3", "1/2", "1/3", "1/6"], answer: 1 },
+        { q: "A bag contains 4 red and 6 blue balls. Two are removed without replacement. P(both red) is:", options: ["2/15", "2/5", "4/25", "1/5"], answer: 0 },
+        { q: "Convert 110101 in base two to base ten.", options: ["51", "55", "45", "53"], answer: 3 },
+        { q: "Convert 45 in base ten to base two.", options: ["100101", "101101", "101011", "110101"], answer: 1 },
+        { q: "If A = {1, 2, 3, 4, 5} and B = {4, 5, 6, 7}, find A ∩ B.", options: ["{6, 7}", "{1, 2, 3, 6, 7}", "{1, 2, 3, 4, 5, 6, 7}", "{4, 5}"], answer: 3 },
+        { q: "How many subsets does the set {a, b, c} have?", options: ["8", "3", "9", "6"], answer: 0 },
+        { q: "Solve the simultaneous equations: x + y = 9 and x − y = 3. Find x.", options: ["6", "5", "12", "3"], answer: 0 },
+        { q: "Factorise: x² + 7x + 12", options: ["(x + 1)(x + 12)", "(x + 3)(x + 4)", "(x − 3)(x − 4)", "(x + 2)(x + 6)"], answer: 1 },
+        { q: "Express 3,400,000 in standard form.", options: ["34 × 10⁵", "3.4 × 10⁶", "3.4 × 10⁷", "3.4 × 10⁵"], answer: 1 },
+        { q: "Round 0.04567 to 2 significant figures.", options: ["0.0460", "0.046", "0.05", "0.045"], answer: 1 },
+        { q: "A man's salary of ₦120,000 is increased by 15%. His new salary is:", options: ["₦18,000", "₦138,000", "₦132,000", "₦135,000"], answer: 1 },
+        { q: "A car covers 270 km in 3 hours 30 minutes. Find its average speed to 1 decimal place.", options: ["81 km/h", "77.1 km/h", "90 km/h", "75.5 km/h"], answer: 1 },
+        { q: "The bearing of B from A is 070°. What is the bearing of A from B?", options: ["110°", "290°", "250°", "070°"], answer: 2 },
+        { q: "Find the gradient of the line joining (1, 3) and (5, 11).", options: ["4", "1/2", "8", "2"], answer: 3 }
+      ],
+      "English Language": [
+        { q: "Identify the figure of speech: 'The wind whispered through the trees.'", options: ["Personification", "Hyperbole", "Metaphor", "Simile"], answer: 0 },
+        { q: "Identify the figure of speech: 'I have told you a million times to close the door.'", options: ["Hyperbole", "Euphemism", "Irony", "Simile"], answer: 0 },
+        { q: "The figure of speech in 'The buzzing bees hummed in the garden' is:", options: ["Alliteration", "Onomatopoeia", "Pun", "Oxymoron"], answer: 1 },
+        { q: "'Peter Piper picked a peck of pickled peppers' is an example of:", options: ["Assonance", "Onomatopoeia", "Metaphor", "Alliteration"], answer: 3 },
+        { q: "'Deafening silence' is an example of:", options: ["Simile", "Oxymoron", "Hyperbole", "Irony"], answer: 1 },
+        { q: "A statement that means the opposite of what is said, often to mock, is:", options: ["Metaphor", "Idiom", "Irony", "Proverb"], answer: 2 },
+        { q: "Choose the correct option: If I ___ you, I would apologise.", options: ["am", "was", "had been", "were"], answer: 3 },
+        { q: "Choose the correct option: Neither the teacher nor the students ___ present.", options: ["is", "were", "was", "has"], answer: 1 },
+        { q: "Choose the correct option: The news ___ very shocking.", options: ["were", "are", "have been", "was"], answer: 3 },
+        { q: "Choose the correct option: Each of the girls ___ her own book.", options: ["were having", "has", "have", "are having"], answer: 1 },
+        { q: "Choose the correct option: She has been living here ___ 2015.", options: ["from", "by", "for", "since"], answer: 3 },
+        { q: "Choose the correct option: He is senior ___ me in school.", options: ["from", "to", "than", "over"], answer: 1 },
+        { q: "Choose the correct option: The thief was caught ___ the act.", options: ["at", "on", "with", "in"], answer: 3 },
+        { q: "Choose the correct option: We were bored ___ the long speech.", options: ["with", "of", "at", "for"], answer: 0 },
+        { q: "The underlined clause is a relative clause: 'The boy who won the race is my cousin.' The clause is:", options: ["The boy", "is my cousin", "the race", "who won the race"], answer: 3 },
+        { q: "In 'Although it was raining, we went out', the clause 'Although it was raining' is a:", options: ["Noun phrase", "Main clause", "Subordinate (dependent) clause", "Simple sentence"], answer: 2 },
+        { q: "A sentence containing one main clause and at least one subordinate clause is a:", options: ["Simple sentence", "Minor sentence", "Complex sentence", "Compound sentence"], answer: 2 },
+        { q: "A sentence made of two main clauses joined by 'and', 'but' or 'or' is a:", options: ["Fragment", "Complex sentence", "Simple sentence", "Compound sentence"], answer: 3 },
+        { q: "Change to the passive voice: 'The students wrote the test.'", options: ["The test is written by the students.", "The test has been wrote by the students.", "The students were written by the test.", "The test was written by the students."], answer: 3 },
+        { q: "Change to indirect speech: He said, 'I will come tomorrow.'", options: ["He said that he would come tomorrow.", "He said that he would come the next day.", "He said that he will come tomorrow.", "He said I would come tomorrow."], answer: 1 },
+        { q: "Choose the word closest in meaning to 'benevolent'.", options: ["greedy", "cruel", "kind", "lazy"], answer: 2 },
+        { q: "Choose the word opposite in meaning to 'meticulous'.", options: ["precise", "careful", "thorough", "careless"], answer: 3 },
+        { q: "Choose the word closest in meaning to 'reluctant'.", options: ["angry", "unwilling", "eager", "tired"], answer: 1 },
+        { q: "Choose the word opposite in meaning to 'abundant'.", options: ["plentiful", "enough", "excess", "scarce"], answer: 3 },
+        { q: "The word 'verbose' means:", options: ["speaking in a foreign language", "speaking softly", "using few words", "using too many words"], answer: 3 },
+        { q: "A person who looks at the bright side of things is:", options: ["an optimist", "a sceptic", "a pessimist", "a realist"], answer: 0 },
+        { q: "The idiom 'to let the cat out of the bag' means:", options: ["to cause trouble", "to reveal a secret", "to free a pet", "to tell a lie"], answer: 1 },
+        { q: "The idiom 'to bury the hatchet' means:", options: ["to hide a weapon", "to dig a hole", "to start a fight", "to make peace"], answer: 3 },
+        { q: "The proverb 'A stitch in time saves nine' teaches us to:", options: ["sew clothes carefully", "save money", "act early to avoid bigger problems", "work slowly"], answer: 2 },
+        { q: "The proverb 'Too many cooks spoil the broth' means that:", options: ["cooking is hard", "soup needs more salt", "cooks are untidy", "too many people on one task can ruin it"], answer: 3 },
+        { q: "Choose the correct spelling of the word meaning 'a place to stay'.", options: ["accommodasion", "acommodation", "accommodation", "accomodation"], answer: 2 },
+        { q: "Choose the correct spelling of the word meaning 'inner sense of right and wrong'.", options: ["consciense", "conscients", "conscience", "concience"], answer: 2 },
+        { q: "The word 'ubiquitous' means:", options: ["present everywhere", "very old", "very large", "very rare"], answer: 0 },
+        { q: "Choose the correct word: The ___ of honesty is important in life.", options: ["principals", "principal", "principle", "principel"], answer: 2 },
+        { q: "The prefix in the word 'misunderstand' is:", options: ["mis-", "under-", "stand-", "-ing"], answer: 0 },
+        { q: "The suffix in the word 'happiness' is:", options: ["-ness", "-ap", "-ess", "happi-"], answer: 0 },
+        { q: "The main character in a story is called the:", options: ["narrator", "critic", "protagonist", "antagonist"], answer: 2 },
+        { q: "The sequence of events in a story is called the:", options: ["plot", "tone", "setting", "theme"], answer: 0 },
+        { q: "The central idea or message of a story is its:", options: ["title", "setting", "theme", "plot"], answer: 2 },
+        { q: "A group of lines in a poem is called a:", options: ["chapter", "stanza", "paragraph", "verse only"], answer: 1 },
+        { q: "Words that end with the same sound at the end of lines of poetry form a:", options: ["metre", "refrain", "rhythm", "rhyme"], answer: 3 },
+        { q: "A play is divided into major sections called:", options: ["verses", "stanzas", "chapters", "acts"], answer: 3 },
+        { q: "Which of these is a formal letter opening?", options: ["Dear Mummy,", "Hi buddy,", "Dear Sir,", "Hello friend,"], answer: 2 },
+        { q: "A letter written to a friend is a/an:", options: ["informal letter", "formal letter", "official letter", "application letter"], answer: 0 },
+        { q: "Which of the following is a conditional sentence?", options: ["If it rains, we shall stay indoors.", "It rained all day.", "The rain is heavy.", "We stayed indoors."], answer: 0 },
+        { q: "In the sentence 'She quickly finished her homework', 'quickly' is an:", options: ["adjective", "preposition", "adverb of manner", "adverb of place"], answer: 2 },
+        { q: "Choose the correct question tag: She can swim, ___?", options: ["isn't she", "can't she", "won't she", "doesn't she"], answer: 1 },
+        { q: "What is the plural of 'criterion'?", options: ["criteria", "criterions", "criterium", "criterias"], answer: 0 },
+        { q: "The word 'bacteria' is the plural of:", options: ["bacteriam", "bacterium", "bacterias", "bacteriums"], answer: 1 },
+        { q: "A sentence that gives a command is called:", options: ["imperative", "interrogative", "exclamatory", "declarative"], answer: 0 }
+      ],
+      "General Science": [
+        { q: "Which cell organelle is called the 'powerhouse of the cell'?", options: ["Ribosome", "Vacuole", "Mitochondrion", "Nucleus"], answer: 2 },
+        { q: "Which part of a plant cell is NOT found in an animal cell?", options: ["Cell membrane", "Cytoplasm", "Cell wall", "Nucleus"], answer: 2 },
+        { q: "The chemical equation for photosynthesis requires carbon dioxide, water and:", options: ["Heat only", "Nitrogen", "Oxygen", "Light energy"], answer: 3 },
+        { q: "The process by which cells release energy from glucose is:", options: ["Photosynthesis", "Excretion", "Respiration", "Digestion"], answer: 2 },
+        { q: "The scientific name of humans is:", options: ["Homo sapiens", "Pan troglodytes", "Canis lupus", "Homo erectus"], answer: 0 },
+        { q: "Which kingdom do mushrooms belong to?", options: ["Monera", "Fungi", "Animalia", "Plantae"], answer: 1 },
+        { q: "The basic unit of heredity is the:", options: ["Cell", "Gene", "Tissue", "Organ"], answer: 1 },
+        { q: "The relationship in which both organisms benefit is called:", options: ["Commensalism", "Predation", "Mutualism", "Parasitism"], answer: 2 },
+        { q: "Which of the following is an example of a parasite?", options: ["Bee", "Tapeworm", "Earthworm", "Cow"], answer: 1 },
+        { q: "The part of the blood that carries digested food and hormones is the:", options: ["Red blood cell", "Plasma", "White blood cell", "Platelet"], answer: 1 },
+        { q: "Which blood vessel carries blood away from the heart?", options: ["Valve", "Capillary", "Vein", "Artery"], answer: 3 },
+        { q: "The enzyme in saliva that digests starch is:", options: ["Amylase", "Lipase", "Trypsin", "Pepsin"], answer: 0 },
+        { q: "Where does most digestion of food take place?", options: ["Large intestine", "Small intestine", "Mouth", "Stomach"], answer: 1 },
+        { q: "The male reproductive cell is the:", options: ["Sperm", "Ovum", "Zygote", "Embryo"], answer: 0 },
+        { q: "The fusion of a sperm and an egg cell is called:", options: ["Germination", "Fertilisation", "Pollination", "Ovulation"], answer: 1 },
+        { q: "An element is a substance made of:", options: ["Two kinds of atom", "Only molecules", "Many mixtures", "One kind of atom"], answer: 3 },
+        { q: "The chemical symbol for sodium is:", options: ["S", "Sn", "Na", "So"], answer: 2 },
+        { q: "The chemical symbol for iron is:", options: ["In", "I", "Ir", "Fe"], answer: 3 },
+        { q: "The chemical formula of water is:", options: ["HO₂", "H₂O", "OH", "H₂O₂"], answer: 1 },
+        { q: "A substance with a pH of 3 is:", options: ["Neutral", "Acidic", "A salt", "Alkaline"], answer: 1 },
+        { q: "Litmus paper turns red in:", options: ["Salt solution", "Pure water", "An alkali", "An acid"], answer: 3 },
+        { q: "Which of these is a chemical change?", options: ["Rusting of iron", "Boiling water", "Melting of ice", "Dissolving sugar"], answer: 0 },
+        { q: "The particles of a gas:", options: ["Are tightly packed", "Vibrate in fixed positions only", "Do not move", "Move freely and fill their container"], answer: 3 },
+        { q: "The change of a solid directly to a gas is called:", options: ["Evaporation", "Condensation", "Sublimation", "Freezing"], answer: 2 },
+        { q: "Which of the following is a good conductor of electricity?", options: ["Rubber", "Copper", "Wood", "Glass"], answer: 1 },
+        { q: "Density is calculated using the formula:", options: ["Mass × Volume", "Volume ÷ Mass", "Mass ÷ Volume", "Mass − Volume"], answer: 2 },
+        { q: "A block of mass 200 g has a volume of 50 cm³. Its density is:", options: ["0.25 g/cm³", "4 g/cm³", "10 g/cm³", "150 g/cm³"], answer: 1 },
+        { q: "The SI unit of force is the:", options: ["Newton", "Pascal", "Watt", "Joule"], answer: 0 },
+        { q: "Speed is calculated as:", options: ["Distance ÷ Time", "Distance − Time", "Distance × Time", "Time ÷ Distance"], answer: 0 },
+        { q: "A car moves 150 km in 2.5 hours. Its average speed is:", options: ["60 km/h", "375 km/h", "65 km/h", "50 km/h"], answer: 0 },
+        { q: "Work done is calculated as:", options: ["Mass × Speed", "Force × Distance", "Force + Distance", "Force ÷ Distance"], answer: 1 },
+        { q: "The unit of energy is the:", options: ["Joule", "Watt", "Pascal", "Newton"], answer: 0 },
+        { q: "The rate of doing work is called:", options: ["Force", "Power", "Pressure", "Energy"], answer: 1 },
+        { q: "Pressure is calculated as:", options: ["Mass ÷ Volume", "Force × Area", "Area ÷ Force", "Force ÷ Area"], answer: 3 },
+        { q: "A force of 200 N acts on an area of 4 m². The pressure is:", options: ["800 Pa", "0.02 Pa", "204 Pa", "50 Pa"], answer: 3 },
+        { q: "Energy stored in a stretched spring is:", options: ["Kinetic energy", "Elastic potential energy", "Chemical energy", "Sound energy"], answer: 1 },
+        { q: "The law of conservation of energy states that energy:", options: ["Can be created", "Can be destroyed", "Can neither be created nor destroyed", "Is always lost"], answer: 2 },
+        { q: "The bending of light as it passes from one medium to another is:", options: ["Absorption", "Reflection", "Diffraction", "Refraction"], answer: 3 },
+        { q: "A plane mirror forms an image that is:", options: ["Virtual and the same size as the object", "Virtual and diminished", "Real and magnified", "Real and inverted"], answer: 0 },
+        { q: "The frequency of a wave is measured in:", options: ["Hertz", "Decibels", "Newtons", "Metres"], answer: 0 },
+        { q: "Sound travels fastest through:", options: ["Solids", "Liquids", "A vacuum", "Gases"], answer: 0 },
+        { q: "The unit of electric current is the:", options: ["Ampere", "Volt", "Ohm", "Watt"], answer: 0 },
+        { q: "According to Ohm's law, V = ___", options: ["R ÷ I", "I ÷ R", "I + R", "I × R"], answer: 3 },
+        { q: "A current of 2 A flows through a 6 Ω resistor. The voltage is:", options: ["8 V", "4 V", "3 V", "12 V"], answer: 3 },
+        { q: "In a series circuit, if one bulb blows:", options: ["The others get brighter", "Only that bulb goes off", "The battery explodes", "All the bulbs go off"], answer: 3 },
+        { q: "The poles of a magnet that repel each other are:", options: ["Opposite poles", "North and south", "Like poles", "Unlike poles"], answer: 2 },
+        { q: "Which planet is known as the Red Planet?", options: ["Mars", "Mercury", "Venus", "Jupiter"], answer: 0 },
+        { q: "The layer of the atmosphere that protects us from ultraviolet rays is the:", options: ["Ozone layer", "Ionosphere", "Exosphere", "Troposphere"], answer: 0 },
+        { q: "The main cause of global warming is the increase of:", options: ["Nitrogen", "Argon", "Oxygen", "Carbon dioxide in the atmosphere"], answer: 3 },
+        { q: "Which of the following is a renewable source of energy?", options: ["Coal", "Wind", "Petroleum", "Natural gas"], answer: 1 }
+      ],
+      "Social Studies": [
+        { q: "The amalgamation of the Northern and Southern protectorates of Nigeria took place in:", options: ["1922", "1900", "1914", "1960"], answer: 2 },
+        { q: "Who was the Governor-General that carried out the amalgamation of Nigeria in 1914?", options: ["Sir Hugh Clifford", "Lord Frederick Lugard", "Sir Arthur Richards", "Sir John Macpherson"], answer: 1 },
+        { q: "The Nigerian Constitution that first introduced elective principle in 1922 was the:", options: ["Lyttelton Constitution", "Clifford Constitution", "Macpherson Constitution", "Richards Constitution"], answer: 1 },
+        { q: "The Constitution of 1946 that introduced regionalism in Nigeria was the:", options: ["Independence Constitution", "Richards Constitution", "Macpherson Constitution", "Clifford Constitution"], answer: 1 },
+        { q: "Nigeria became a republic in:", options: ["1963", "1979", "1966", "1960"], answer: 0 },
+        { q: "The first President of Nigeria was:", options: ["Dr Nnamdi Azikiwe", "Chief Obafemi Awolowo", "Alhaji Shehu Shagari", "Alhaji Abubakar Tafawa Balewa"], answer: 0 },
+        { q: "Which of these was the first Nigerian Governor-General?", options: ["Sir Hugh Clifford", "Lord Lugard", "Dr Nnamdi Azikiwe", "Sir James Robertson"], answer: 2 },
+        { q: "The Nigerian Civil War lasted from:", options: ["1960 to 1963", "1966 to 1967", "1970 to 1975", "1967 to 1970"], answer: 3 },
+        { q: "Nigeria's capital was moved from Lagos to Abuja officially in:", options: ["2000", "1991", "1976", "1960"], answer: 1 },
+        { q: "A system of government in which power is shared between the central and regional governments is:", options: ["Dictatorship", "Federalism", "Unitary system", "Monarchy"], answer: 1 },
+        { q: "The three tiers of government in Nigeria are:", options: ["Executive, Legislature and Judiciary", "Federal, State and Local", "National, Regional and Village", "Senate, House and Council"], answer: 1 },
+        { q: "The head of the Nigerian Senate is the:", options: ["Chief Justice", "Senate President", "Vice President", "Speaker"], answer: 1 },
+        { q: "The highest court in Nigeria is the:", options: ["High Court", "Court of Appeal", "Magistrate Court", "Supreme Court"], answer: 3 },
+        { q: "The separation of powers among the legislature, executive and judiciary is meant to:", options: ["Control the military", "Increase taxes", "Prevent abuse of power", "Reduce the number of laws"], answer: 2 },
+        { q: "A group of people organised to win elections and form the government is a:", options: ["Trade union", "Club", "Political party", "Pressure group"], answer: 2 },
+        { q: "The right to vote and be voted for is called:", options: ["Citizenship", "Immigration", "Naturalisation", "Franchise (suffrage)"], answer: 3 },
+        { q: "Citizenship by birth in Nigeria is obtained when:", options: ["One lives in Nigeria for a day", "One buys a house", "At least one parent or grandparent is a Nigerian", "One is a tourist"], answer: 2 },
+        { q: "Which of the following is a function of the Independent National Electoral Commission (INEC)?", options: ["Trying criminals", "Building roads", "Conducting elections", "Collecting taxes"], answer: 2 },
+        { q: "The population count of a country is carried out through a:", options: ["Referendum", "Survey of land", "Census", "Election"], answer: 2 },
+        { q: "The population of a country is mainly increased by:", options: ["Deaths and emigration", "War only", "Famine", "Births and immigration"], answer: 3 },
+        { q: "A country with a larger number of children and a smaller number of old people has a population pyramid with a:", options: ["Wide base", "Round shape", "Equal width", "Narrow base"], answer: 0 },
+        { q: "The movement of people out of a country to live elsewhere is:", options: ["Urbanisation", "Immigration", "Resettlement", "Emigration"], answer: 3 },
+        { q: "The major vegetation zone in Northern Nigeria is the:", options: ["Guinea and Sudan savanna", "Rain forest", "Mangrove forest", "Montane forest"], answer: 0 },
+        { q: "The Niger Delta is mainly noted for:", options: ["Cocoa farming only", "Crude oil production", "Coal mining", "Tin mining"], answer: 1 },
+        { q: "The main religion practised in the Northern part of Nigeria is:", options: ["Judaism", "Buddhism", "Islam", "Hinduism"], answer: 2 },
+        { q: "Which of these is a Nigerian ethnic group found in the Middle Belt?", options: ["Itsekiri", "Ijaw", "Tiv", "Efik"], answer: 2 },
+        { q: "The Igbo people live mainly in the:", options: ["South-East", "North-West", "South-West", "North-East"], answer: 0 },
+        { q: "A set of beliefs, customs and way of life of a people is their:", options: ["Constitution", "Economy", "Culture", "Population"], answer: 2 },
+        { q: "Which of these is an element of culture?", options: ["Tax", "Census", "Treaty", "Language"], answer: 3 },
+        { q: "Which of the following is a way by which culture is passed on?", options: ["Quarantine", "Taxation", "Education and socialisation", "Elections"], answer: 2 },
+        { q: "The practice of selling and buying of human beings in the past is called:", options: ["Slave trade", "Colonialism", "Free trade", "Barter"], answer: 0 },
+        { q: "The sea route used in transporting enslaved Africans to the Americas is the:", options: ["Red Sea", "Atlantic Ocean", "Indian Ocean", "Mediterranean Sea"], answer: 1 },
+        { q: "The main reason for European colonisation of Africa was:", options: ["To plant flowers", "To obtain raw materials and markets", "To build zoos", "To spread sports"], answer: 1 },
+        { q: "The Berlin Conference of 1884–1885 was about:", options: ["The partition of Africa", "The abolition of slavery", "Independence of Nigeria", "The founding of the UN"], answer: 0 },
+        { q: "The currency used in Ghana is the:", options: ["Rand", "Naira", "Cedi", "Franc"], answer: 2 },
+        { q: "Which of these is a regional economic group in West Africa?", options: ["BRICS", "ECOWAS", "NATO", "OPEC"], answer: 1 },
+        { q: "OPEC is an organisation of:", options: ["Rice importers", "Gold buyers", "Cocoa producers", "Oil-producing countries"], answer: 3 },
+        { q: "The headquarters of the United Nations is in:", options: ["Geneva", "London", "New York", "Paris"], answer: 2 },
+        { q: "The type of trade carried out between two or more countries is:", options: ["Local trade", "International trade", "Retail trade", "Barter only"], answer: 1 },
+        { q: "Goods brought into a country from another country are:", options: ["Imports", "Raw materials", "Gifts only", "Exports"], answer: 0 },
+        { q: "A bank that issues the currency and controls the money supply in a country is the:", options: ["Microfinance bank", "Commercial bank", "Central Bank", "Mortgage bank"], answer: 2 },
+        { q: "The Central Bank of Nigeria is located in:", options: ["Port Harcourt", "Abuja", "Kano", "Lagos"], answer: 1 },
+        { q: "Unemployment means:", options: ["Willing and able to work but unable to find a job", "Refusing to work", "Working on weekends", "Being on holiday"], answer: 0 },
+        { q: "The main problem of rapid urbanisation is:", options: ["Excess rainfall", "Overcrowding and pressure on social amenities", "Too many farms", "Shortage of buildings in villages"], answer: 1 },
+        { q: "Which of these is an effect of drug abuse?", options: ["Better health", "Mental illness and poor health", "High academic performance", "Respect from others"], answer: 1 },
+        { q: "Which of these is a cause of examination malpractice?", options: ["Hard work", "Regular reading", "Good teaching", "Poor preparation and fear of failure"], answer: 3 },
+        { q: "The best way to settle a dispute between neighbours is through:", options: ["Dialogue and mediation", "Abuse", "Revenge", "Violence"], answer: 0 },
+        { q: "The practice of having more than one husband or wife at the same time is generally called:", options: ["Monogamy", "Polygamy", "Celibacy", "Divorce"], answer: 1 },
+        { q: "The process of becoming a member of society by learning its norms is:", options: ["Socialisation", "Taxation", "Migration", "Urbanisation"], answer: 0 },
+        { q: "The latitude 0° is called the:", options: ["Prime Meridian", "Tropic of Cancer", "Arctic Circle", "Equator"], answer: 3 }
+      ],
+      "Basic Technology": [
+        { q: "The process of designing a product, making it and testing it is called:", options: ["The design process", "Marketing", "Mass production", "Recycling"], answer: 0 },
+        { q: "The first step in the technological design process is:", options: ["Testing the product", "Identifying the problem", "Selling the product", "Painting the model"], answer: 1 },
+        { q: "Which type of drawing shows an object as seen from the front, side and top in separate views?", options: ["Isometric drawing", "Orthographic projection", "Perspective drawing", "Freehand sketch"], answer: 1 },
+        { q: "In isometric drawing, the vertical edges are drawn at an angle of:", options: ["60° to the vertical", "45° to the horizontal", "30° to the vertical", "90° to the horizontal"], answer: 3 },
+        { q: "In technical drawing, hidden details are shown with:", options: ["Chain lines", "Dashed lines", "Thick continuous lines", "Thin continuous lines"], answer: 1 },
+        { q: "A drawing scale of 1 : 5 means that:", options: ["The drawing is 5 times bigger", "1 unit on the drawing represents 5 units on the real object", "The object is the same size", "The drawing is 5 cm long"], answer: 1 },
+        { q: "Which instrument is used to draw angles accurately?", options: ["Protractor", "Try square", "Divider", "Spirit level"], answer: 0 },
+        { q: "Which wood is classified as a hardwood?", options: ["Mahogany", "Pine", "Fir", "Spruce"], answer: 0 },
+        { q: "The process of removing water from freshly cut timber is called:", options: ["Seasoning", "Sanding", "Planing", "Veneering"], answer: 0 },
+        { q: "Which tool is used for cutting along the grain of wood?", options: ["Rip saw", "Hacksaw", "Coping saw", "Tin snips"], answer: 0 },
+        { q: "A joint used to fix two pieces of wood at right angles and strengthened by interlocking pins is the:", options: ["Dovetail joint", "Butt joint", "Mitre joint", "Lap joint"], answer: 0 },
+        { q: "A coping saw is mainly used for:", options: ["Cutting thick metal", "Smoothening", "Measuring", "Cutting curves in wood"], answer: 3 },
+        { q: "Metals are classified as ferrous or non-ferrous. Which of these is non-ferrous?", options: ["Mild steel", "Wrought iron", "Cast iron", "Copper"], answer: 3 },
+        { q: "Steel is an alloy of iron and:", options: ["Carbon", "Zinc", "Tin", "Copper"], answer: 0 },
+        { q: "Brass is an alloy of:", options: ["Iron and carbon", "Lead and tin", "Copper and tin", "Copper and zinc"], answer: 3 },
+        { q: "Which of these metals is the best conductor of electricity?", options: ["Aluminium", "Iron", "Lead", "Silver"], answer: 3 },
+        { q: "Heating a metal and cooling it slowly to make it softer is called:", options: ["Hardening", "Tempering", "Casting", "Annealing"], answer: 3 },
+        { q: "The process of pouring molten metal into a mould to take a shape is:", options: ["Welding", "Casting", "Forging", "Rolling"], answer: 1 },
+        { q: "Joining two pieces of metal by melting them together is:", options: ["Soldering", "Bolting", "Riveting", "Welding"], answer: 3 },
+        { q: "Which of these is used as a flux in soldering?", options: ["Water", "Oil", "Resin", "Sand"], answer: 2 },
+        { q: "Plastics that can be softened by heating and reshaped are called:", options: ["Elastomers only", "Thermosetting plastics", "Composites", "Thermoplastics"], answer: 3 },
+        { q: "Which of these is a thermosetting plastic?", options: ["Polythene", "Nylon", "Bakelite", "PVC"], answer: 2 },
+        { q: "Concrete is a mixture of cement, sand, gravel (aggregate) and:", options: ["Lime juice", "Iron filings", "Oil", "Water"], answer: 3 },
+        { q: "The strength of a building foundation depends mostly on the:", options: ["Roof shape only", "Number of windows", "Colour of paint", "Type of soil and materials used"], answer: 3 },
+        { q: "The instrument used to check whether a surface is level is a:", options: ["Spirit level", "Marking gauge", "Try square", "Plumb bob"], answer: 0 },
+        { q: "A plumb bob is used to check that a wall is:", options: ["Vertical", "Horizontal", "Level", "Curved"], answer: 0 },
+        { q: "The unit of electrical power is the:", options: ["Ampere", "Watt", "Joule", "Ohm"], answer: 1 },
+        { q: "A device that protects electrical circuits from excess current is a:", options: ["Switch", "Fuse", "Capacitor", "Resistor"], answer: 1 },
+        { q: "The colour of the earth wire in a three-pin plug is:", options: ["Blue", "Green and yellow", "Red", "Brown"], answer: 1 },
+        { q: "Which component stores electric charge?", options: ["Capacitor", "Resistor", "Fuse", "Diode"], answer: 0 },
+        { q: "A component that allows current to flow in one direction only is a:", options: ["Switch", "Diode", "Resistor", "Capacitor"], answer: 1 },
+        { q: "A device that converts mechanical energy into electrical energy is a:", options: ["Motor", "Battery", "Generator", "Transformer"], answer: 2 },
+        { q: "A transformer is used to change:", options: ["Speed to force", "The voltage of an alternating current", "Heat to sound", "Direct current to light"], answer: 1 },
+        { q: "Which of the following is a safety rule when working with electricity?", options: ["Touch wires with wet hands", "Use damaged cables", "Repair appliances while they are on", "Switch off the power before repairing an appliance"], answer: 3 },
+        { q: "The simple machine used in a wheelbarrow is the:", options: ["Screw", "Wedge", "Pulley", "Lever"], answer: 3 },
+        { q: "The mechanical advantage of a machine is calculated as:", options: ["Effort ÷ Load", "Load × Effort", "Load ÷ Effort", "Load − Effort"], answer: 2 },
+        { q: "A machine has a load of 600 N and an effort of 150 N. Its mechanical advantage is:", options: ["450", "0.25", "90,000", "4"], answer: 3 },
+        { q: "The efficiency of a machine is calculated as:", options: ["(Work input ÷ Work output) × 100%", "Work output × Work input", "Work input − Work output", "(Work output ÷ Work input) × 100%"], answer: 3 },
+        { q: "A machine part that transfers rotation between shafts using teeth is a:", options: ["Gear", "Bolt", "Spring", "Bearing"], answer: 0 },
+        { q: "Which of the following is a renewable source of energy?", options: ["Solar energy", "Crude oil", "Coal", "Natural gas"], answer: 0 },
+        { q: "Which of these is a use of biogas?", options: ["Cooking and lighting", "Making glass", "Welding steel", "Making plastics"], answer: 0 },
+        { q: "The materials used for making bricks include:", options: ["Sawdust only", "Clay", "Glass", "Paper"], answer: 1 },
+        { q: "The ideal angle between two adjacent walls in a square building is:", options: ["60°", "45°", "120°", "90°"], answer: 3 },
+        { q: "Which safety clothing protects the eyes while grinding metal?", options: ["Goggles", "Boots", "Apron", "Gloves"], answer: 0 },
+        { q: "The correct way to dispose of used engine oil is to:", options: ["Pour it on the soil", "Take it to a recycling collection point", "Pour it in a drain", "Burn it in the open"], answer: 1 },
+        { q: "Technological products that harm the environment can be reduced by:", options: ["Dumping waste on roads", "Throwing waste into rivers", "Recycling and reusing materials", "Burning plastics"], answer: 2 },
+        { q: "An example of an emerging technology is:", options: ["The abacus", "Artificial intelligence", "The telegraph", "The typewriter"], answer: 1 },
+        { q: "A 3D printer makes objects by:", options: ["Adding material layer by layer", "Cutting material away only", "Melting scrap only", "Painting a surface"], answer: 0 },
+        { q: "A drawing of a house showing the arrangement of rooms from above is a:", options: ["Perspective", "Section only", "Elevation", "Floor plan"], answer: 3 },
+        { q: "The view of a building seen from the front is called the:", options: ["Plan", "Isometric", "Section", "Front elevation"], answer: 3 }
+      ],
+      "Computer Studies": [
+        { q: "The brain of the computer is the:", options: ["Central Processing Unit (CPU)", "Monitor", "Keyboard", "Hard disk"], answer: 0 },
+        { q: "Which of these is a function of the Control Unit?", options: ["Displaying output", "Directing the operations of the computer", "Storing data permanently", "Printing documents"], answer: 1 },
+        { q: "RAM stands for:", options: ["Rapid Action Memory", "Random Application Module", "Read Access Memory", "Random Access Memory"], answer: 3 },
+        { q: "Which memory is permanent and holds the start-up instructions of a computer?", options: ["Register", "RAM", "Cache", "ROM"], answer: 3 },
+        { q: "1 gigabyte (GB) is approximately equal to:", options: ["1,000 megabytes", "1,000 kilobytes", "100 megabytes", "1,000 terabytes"], answer: 0 },
+        { q: "The binary number 1101 is equal to what in base ten?", options: ["11", "15", "13", "12"], answer: 2 },
+        { q: "The decimal number 10 in binary is:", options: ["1010", "1001", "1110", "1100"], answer: 0 },
+        { q: "Which of these is an example of system software?", options: ["Presentation software", "Word processor", "Operating system", "Spreadsheet"], answer: 2 },
+        { q: "Which of the following is an operating system for mobile phones?", options: ["Android", "Excel", "Photoshop", "Oracle"], answer: 0 },
+        { q: "Software that is used to browse the World Wide Web is a:", options: ["Web browser", "Compiler", "Spreadsheet", "Database"], answer: 0 },
+        { q: "Which protocol is used for secure web browsing?", options: ["SMTP", "HTTPS", "FTP", "POP"], answer: 1 },
+        { q: "The unique numerical address of a device on a network is the:", options: ["URL", "IP address", "Domain name", "Email address"], answer: 1 },
+        { q: "Which of these is a top-level domain for educational institutions?", options: [".org", ".gov", ".com", ".edu"], answer: 3 },
+        { q: "A malicious program that disguises itself as useful software is a:", options: ["Compiler", "Browser", "Firewall", "Trojan horse"], answer: 3 },
+        { q: "A security system that monitors and filters network traffic is a:", options: ["Worm", "Virus", "Firewall", "Spam"], answer: 2 },
+        { q: "Unwanted bulk e-mail messages are called:", options: ["Spyware", "Spam", "Cookies", "Hardware"], answer: 1 },
+        { q: "Tricking people into revealing personal information through fake messages is:", options: ["Programming", "Hacking", "Phishing", "Browsing"], answer: 2 },
+        { q: "Which of these is a strong password?", options: ["12345678", "Tr7#kLp9@", "password", "abcdef"], answer: 1 },
+        { q: "In a spreadsheet, the cell at the intersection of column B and row 4 is named:", options: ["Row B4", "B4", "B-4", "4B"], answer: 1 },
+        { q: "Which spreadsheet formula finds the average of cells A1 to A10?", options: ["=AVERAGE(A1:A10)", "=TOTAL(A1:A10)", "=AVG(A1-A10)", "=MEAN(A1,A10)"], answer: 0 },
+        { q: "In a spreadsheet, which formula finds the largest value in B2 to B9?", options: ["=TOP(B2:B9)", "=BIG(B2:B9)", "=HIGH(B2,B9)", "=MAX(B2:B9)"], answer: 3 },
+        { q: "A cell contains the formula =A1*B1. If A1 = 6 and B1 = 7, the result is:", options: ["1", "13", "67", "42"], answer: 3 },
+        { q: "In a word processor, which feature checks for wrongly spelt words?", options: ["Find and replace", "Mail merge", "Thesaurus", "Spell checker"], answer: 3 },
+        { q: "The feature of a word processor used to combine a letter with a list of names is:", options: ["Spell check", "Mail merge", "Header and footer", "Table of contents"], answer: 1 },
+        { q: "The shortcut key to undo the last action is:", options: ["Ctrl + Y", "Ctrl + U", "Ctrl + Z", "Ctrl + X"], answer: 2 },
+        { q: "The shortcut key for selecting all contents of a document is:", options: ["Ctrl + P", "Ctrl + B", "Ctrl + A", "Ctrl + S"], answer: 2 },
+        { q: "A collection of organised and related data is a:", options: ["Compiler", "Database", "Network", "Spreadsheet"], answer: 1 },
+        { q: "In a database table, a single row of data is called a:", options: ["Record", "Field", "Cell", "Key"], answer: 0 },
+        { q: "A field that uniquely identifies each record in a database table is the:", options: ["Primary key", "Query", "Foreign table", "Report"], answer: 0 },
+        { q: "Which of these is a database management system?", options: ["MS PowerPoint", "MS Access", "MS Word", "MS Paint"], answer: 1 },
+        { q: "A step-by-step procedure for solving a problem is an:", options: ["Database", "Algorithm", "Operating system", "Protocol"], answer: 1 },
+        { q: "The flowchart symbol for a decision is a:", options: ["Parallelogram", "Oval", "Rectangle", "Diamond"], answer: 3 },
+        { q: "The flowchart symbol for a process is a:", options: ["Oval", "Circle", "Diamond", "Rectangle"], answer: 3 },
+        { q: "A set of instructions written in a programming language is called a:", options: ["Protocol", "Program", "Network", "Database"], answer: 1 },
+        { q: "Which of these is a high-level programming language?", options: ["Binary", "Python", "Assembly language", "Machine code"], answer: 1 },
+        { q: "A translator that converts a program line by line into machine code is a/an:", options: ["Linker", "Assembler", "Compiler", "Interpreter"], answer: 3 },
+        { q: "A programming error in the rules of a language is a:", options: ["Hardware fault", "Runtime power cut", "Syntax error", "Logical bug only"], answer: 2 },
+        { q: "A named storage location in a program that holds data is a:", options: ["Loop", "Variable", "Function", "Comment"], answer: 1 },
+        { q: "A program structure that repeats a set of instructions is a:", options: ["Constant", "Variable", "Loop", "Comment"], answer: 2 },
+        { q: "Which generation of computers used integrated circuits?", options: ["Third generation", "First generation", "Second generation", "Fifth generation"], answer: 0 },
+        { q: "The second generation of computers used:", options: ["Integrated circuits", "Vacuum tubes", "Transistors", "Microprocessors"], answer: 2 },
+        { q: "Which device converts digital signals to analogue signals for telephone lines?", options: ["Scanner", "Modem", "Monitor", "Printer"], answer: 1 },
+        { q: "A device that connects many computers in a network and sends data to the specific destination is a:", options: ["Modem", "Switch", "Scanner", "Monitor"], answer: 1 },
+        { q: "The topology in which all devices connect to a central hub is the:", options: ["Ring topology", "Mesh topology only", "Star topology", "Bus topology"], answer: 2 },
+        { q: "A network that covers a city is a:", options: ["PAN", "LAN", "WAN", "MAN"], answer: 3 },
+        { q: "Storing and accessing data and programs over the internet is known as:", options: ["Disk formatting", "Data compression", "Offline computing", "Cloud computing"], answer: 3 },
+        { q: "An e-mail attachment is:", options: ["A spam folder", "A website address", "A file sent along with an e-mail message", "A deleted message"], answer: 2 },
+        { q: "The father of the modern computer is generally regarded to be:", options: ["Tim Berners-Lee", "Charles Babbage", "Bill Gates", "Alan Turing"], answer: 1 },
+        { q: "The inventor of the World Wide Web is:", options: ["Charles Babbage", "Tim Berners-Lee", "Steve Jobs", "Larry Page"], answer: 1 },
+        { q: "Cyber-bullying is:", options: ["Researching online", "Playing educational games", "Using the internet to harass or threaten someone", "Chatting politely"], answer: 2 }
+      ],
+      "Civic Education": [
+        { q: "Chapter IV of the 1999 Nigerian Constitution deals with:", options: ["The judiciary", "Citizenship", "Fundamental human rights", "The federal executive"], answer: 2 },
+        { q: "Under the right to life, no person may be deprived of life intentionally except:", options: ["In execution of a court sentence for a criminal offence", "By a chief's personal decision", "By the order of any politician", "By the wish of any policeman"], answer: 0 },
+        { q: "The Universal Declaration of Human Rights was adopted by the United Nations in:", options: ["1960", "1948", "1945", "1999"], answer: 1 },
+        { q: "A person who becomes a citizen of a country by legal process after living there is a citizen by:", options: ["Descent", "Birth", "Naturalisation", "Marriage only"], answer: 2 },
+        { q: "Which of these is a duty of a Nigerian citizen?", options: ["Making laws", "Appointing judges", "Printing money", "Paying taxes and obeying laws"], answer: 3 },
+        { q: "A system of government in which the people rule through elected representatives is:", options: ["Representative democracy", "Monarchy", "Oligarchy", "Autocracy"], answer: 0 },
+        { q: "The principle that no one is above the law is the:", options: ["Separation of powers", "Franchise", "Federalism", "Rule of law"], answer: 3 },
+        { q: "The organ of government that interprets and applies the law is the:", options: ["Police", "Executive", "Legislature", "Judiciary"], answer: 3 },
+        { q: "A free and fair election requires:", options: ["Violence", "Vote buying", "Equal opportunity and secret ballot", "Intimidation of voters"], answer: 2 },
+        { q: "Refusal of eligible citizens to take part in politics is known as:", options: ["Patriotism", "Political apathy", "Activism", "Political participation"], answer: 1 },
+        { q: "Which of these is an electoral offence?", options: ["Showing a voter's card", "Voting at the polling unit", "Thumb-printing multiple ballot papers", "Queuing to vote"], answer: 2 },
+        { q: "The body that registers political parties and conducts elections in Nigeria is:", options: ["INEC", "NYSC", "ICPC", "EFCC"], answer: 0 },
+        { q: "Which institution investigates corruption in public offices in Nigeria?", options: ["INEC", "FRSC", "NAFDAC", "ICPC"], answer: 3 },
+        { q: "The act of using public office for private gain is:", options: ["Patriotism", "Honesty", "Leadership", "Corruption"], answer: 3 },
+        { q: "Which of the following is an effect of corruption on a nation?", options: ["Increased honesty", "Stronger schools", "Poor infrastructure and loss of public trust", "Better roads"], answer: 2 },
+        { q: "Which of these is a way of fighting corruption?", options: ["Giving bribes", "Reporting corrupt practices through lawful channels", "Joining corrupt groups", "Hiding the truth"], answer: 1 },
+        { q: "Cultism in schools can be reduced by:", options: ["Counselling and strict discipline", "Praising cult members", "Ignoring cases", "Fighting back"], answer: 0 },
+        { q: "Which of the following is a social vice among youths?", options: ["Reading", "Obedience", "Hard work", "Drug abuse"], answer: 3 },
+        { q: "HIV is mainly transmitted through:", options: ["Sharing a seat", "Shaking hands", "Mosquito bites", "Unprotected sex and contaminated blood"], answer: 3 },
+        { q: "Human trafficking involves:", options: ["Tourism", "Recruiting and moving people to exploit them", "Normal migration for study", "Selling goods abroad"], answer: 1 },
+        { q: "Child labour is wrong because it:", options: ["Teaches children values", "Makes them rich", "Deprives children of education and healthy development", "Increases school enrolment"], answer: 2 },
+        { q: "Which of the following is a form of child abuse?", options: ["Denying a child food as punishment", "Giving chores in moderation", "Praising a child", "Sending a child to school"], answer: 0 },
+        { q: "The national pledge is recited to show:", options: ["Loyalty to the nation", "Loyalty to a political party", "Respect for one tribe", "Hatred of foreigners"], answer: 0 },
+        { q: "The green colour on the Nigerian flag represents:", options: ["Minerals", "Agriculture", "Peace", "Unity"], answer: 1 },
+        { q: "The motto of Nigeria is:", options: ["Freedom and Equality", "Unity and Faith, Peace and Progress", "Peace and Justice", "Strength in Diversity"], answer: 1 },
+        { q: "A national value that promotes unity, hard work and honesty is called:", options: ["Nepotism", "Rivalry", "Patriotism", "Bribery"], answer: 2 },
+        { q: "Which of the following is an example of responsible citizenship?", options: ["Cheating in exams", "Destroying public property", "Smuggling goods", "Voting in elections"], answer: 3 },
+        { q: "Respect for the rights of others is also known as:", options: ["Hostility", "Tolerance", "Arrogance", "Indifference"], answer: 1 },
+        { q: "A mediator in a conflict is a person who:", options: ["Starts the quarrel", "Takes sides", "Helps disputing parties reach agreement", "Punishes the quarrelling parties"], answer: 2 },
+        { q: "The peaceful resolution of conflict through discussion between the parties is:", options: ["Riot", "Coercion", "Negotiation", "Boycott only"], answer: 2 },
+        { q: "Which of the following is a cause of conflict in a community?", options: ["Cooperation", "Tolerance", "Mutual respect", "Land disputes"], answer: 3 },
+        { q: "The process of making laws in Nigeria is carried out by the:", options: ["Civil service", "National Assembly", "Police", "Supreme Court"], answer: 1 },
+        { q: "The civil service is made up of:", options: ["Permanent staff who carry out government policies", "Elected politicians", "Traditional rulers", "Military officers"], answer: 0 },
+        { q: "Non-governmental organisations (NGOs) are formed to:", options: ["Provide services and help society independent of government", "Conduct elections", "Make national laws", "Print currency"], answer: 0 },
+        { q: "A peaceful way of protesting against a government policy is:", options: ["Blocking all roads with weapons", "Attacking police", "Burning of public buildings", "A peaceful rally with permission"], answer: 3 },
+        { q: "Which of the following is a consumer right?", options: ["The right to cheat sellers", "The right to safety and information on products", "The right to refuse payment", "The right to steal goods"], answer: 1 },
+        { q: "The agency that regulates food and drug quality in Nigeria is:", options: ["NAFDAC", "NIMC", "NEMA", "NNPC"], answer: 0 },
+        { q: "The National Identity Management Commission (NIMC) is responsible for:", options: ["Issuing national identification numbers", "Conducting elections", "Regulating drugs", "Collecting taxes"], answer: 0 },
+        { q: "Traffic laws are made to:", options: ["Increase accidents", "Reduce accidents and keep order on the roads", "Punish drivers only", "Reduce vehicles for fun"], answer: 1 },
+        { q: "The Federal Road Safety Corps (FRSC) was established to:", options: ["Conduct elections", "Regulate food", "Fight corruption", "Enforce road safety"], answer: 3 },
+        { q: "Which of the following is an example of public property?", options: ["Personal phones", "Public libraries", "Family compounds", "Private cars"], answer: 1 },
+        { q: "To protect public property, a good citizen should:", options: ["Sell it", "Ignore damage to it", "Report vandals to the authorities", "Join in the destruction"], answer: 2 },
+        { q: "The first step to solving a social problem such as drug abuse is:", options: ["Encouraging the abuse", "Silence", "Ignoring the problem", "Education and awareness"], answer: 3 },
+        { q: "Good governance is characterised by:", options: ["Secrecy", "Nepotism", "Impunity", "Transparency and accountability"], answer: 3 },
+        { q: "Which of these is an international organisation that promotes world peace?", options: ["FIFA", "UEFA", "United Nations", "OPEC"], answer: 2 },
+        { q: "The African Union replaced which earlier organisation in 2002?", options: ["Commonwealth", "ECOWAS", "Organisation of African Unity (OAU)", "League of Nations"], answer: 2 },
+        { q: "Which day is celebrated as Democracy Day in Nigeria?", options: ["1st October", "12th June", "29th May", "25th December"], answer: 1 },
+        { q: "Voluntary service to one's community without pay is:", options: ["Employment", "Taxation", "Volunteerism", "Corruption"], answer: 2 },
+        { q: "The process of identifying with and being loyal to one's nation is:", options: ["Nationalism", "Isolation", "Tribalism", "Colonialism"], answer: 0 },
+        { q: "A Nigerian citizen becomes qualified to vote at the age of:", options: ["25 years", "16 years", "21 years", "18 years"], answer: 3 }
+      ],
+      "Agricultural Science": [
+        { q: "The branch of agriculture that deals with the study of soils is:", options: ["Entomology", "Forestry", "Pedology (soil science)", "Horticulture"], answer: 2 },
+        { q: "The study of insects is called:", options: ["Pathology", "Entomology", "Pedology", "Zoology only"], answer: 1 },
+        { q: "Growing of fruits, vegetables and ornamental plants is called:", options: ["Horticulture", "Silviculture", "Agronomy", "Apiculture"], answer: 0 },
+        { q: "The type of farming in which land is cultivated for some years and abandoned for a period to regain fertility is:", options: ["Irrigation farming", "Mixed farming", "Plantation farming", "Shifting cultivation"], answer: 3 },
+        { q: "A system of growing two or more crops on the same piece of land at the same time is:", options: ["Mixed cropping", "Bush fallowing", "Crop rotation", "Monocropping"], answer: 0 },
+        { q: "The topmost layer of soil that is rich in humus is the:", options: ["B-horizon", "Bedrock", "A-horizon (topsoil)", "C-horizon"], answer: 2 },
+        { q: "The soil texture that contains the highest proportion of sand is:", options: ["Sandy soil", "Clay soil", "Silt soil", "Loamy soil"], answer: 0 },
+        { q: "The soil type best for crop production because of good drainage and water retention is:", options: ["Clay soil", "Loamy soil", "Gravel soil", "Sandy soil"], answer: 1 },
+        { q: "The pH value of a neutral soil is:", options: ["14", "7", "5", "1"], answer: 1 },
+        { q: "Lime is added to soil to:", options: ["Increase acidity", "Prevent erosion", "Add nitrogen", "Reduce acidity"], answer: 3 },
+        { q: "Which of these is a method of controlling soil erosion?", options: ["Bush burning", "Overgrazing", "Deforestation", "Terracing"], answer: 3 },
+        { q: "The removal of the topsoil by agents such as water and wind is:", options: ["Soil erosion", "Soil formation", "Leaching", "Compaction"], answer: 0 },
+        { q: "The washing down of soluble plant nutrients below the root zone is:", options: ["Transpiration", "Leaching", "Erosion", "Mulching"], answer: 1 },
+        { q: "Which of the following nutrients is the major component of urea fertilizer?", options: ["Nitrogen", "Calcium", "Phosphorus", "Potassium"], answer: 0 },
+        { q: "A compound fertilizer labelled 15:15:15 contains:", options: ["Only potassium", "Only calcium", "Only nitrogen", "Nitrogen, phosphorus and potassium in equal proportion"], answer: 3 },
+        { q: "The practice of putting seeds in a nursery bed before planting is to:", options: ["Waste seeds", "Raise healthy seedlings for transplanting", "Increase weeds", "Reduce yields"], answer: 1 },
+        { q: "The process of moving seedlings from the nursery to the main field is:", options: ["Pruning", "Thinning", "Transplanting", "Weeding"], answer: 2 },
+        { q: "The removal of excess seedlings from a stand to give enough room is:", options: ["Mulching", "Transplanting", "Thinning", "Pruning"], answer: 2 },
+        { q: "Planting seeds to replace those that failed to germinate is called:", options: ["Supplying (gap filling)", "Thinning", "Fallowing", "Pruning"], answer: 0 },
+        { q: "A plant that has two seed leaves in its seed is a:", options: ["Dicotyledon", "Fern", "Gymnosperm", "Monocotyledon"], answer: 0 },
+        { q: "Which of these crops is a monocotyledon?", options: ["Orange", "Groundnut", "Maize", "Cowpea"], answer: 2 },
+        { q: "Which of these is a legume?", options: ["Cassava", "Rice", "Soya bean", "Sugar cane"], answer: 2 },
+        { q: "A weed that competes with crops mainly for:", options: ["Fertiliser only", "Water, light and nutrients", "Pests", "Pollen"], answer: 1 },
+        { q: "Which of these is a cultural method of weed control?", options: ["Hand weeding and crop rotation", "Use of herbicides", "Use of biological agents", "Use of fire only"], answer: 0 },
+        { q: "A chemical used to kill weeds is called a:", options: ["Insecticide", "Fungicide", "Rodenticide", "Herbicide"], answer: 3 },
+        { q: "A chemical used to kill insect pests is an:", options: ["Fungicide", "Insecticide", "Herbicide", "Rodenticide"], answer: 1 },
+        { q: "A pest that damages stored grains is the:", options: ["Weevil", "Stem borer", "Locust", "Aphid"], answer: 0 },
+        { q: "The swarming insect that destroys entire farms of crops is the:", options: ["Bee", "Weevil", "Termite", "Locust"], answer: 3 },
+        { q: "A fungal disease of cocoa pods is:", options: ["Rinderpest", "Black pod disease", "Anthrax", "Newcastle disease"], answer: 1 },
+        { q: "A viral disease of poultry is:", options: ["Mange", "Coccidiosis", "Newcastle disease", "Black pod"], answer: 2 },
+        { q: "Trypanosomiasis in cattle is transmitted by:", options: ["The housefly", "The tick", "The mosquito", "The tsetse fly"], answer: 3 },
+        { q: "Which of the following is a ruminant animal?", options: ["Goat", "Chicken", "Rabbit", "Pig"], answer: 0 },
+        { q: "A male cattle that has been castrated is called a:", options: ["Calf", "Bull", "Heifer", "Bullock (ox)"], answer: 3 },
+        { q: "A female cow that has not yet given birth is a:", options: ["Heifer", "Bull", "Steer", "Cow"], answer: 0 },
+        { q: "The housing for pigs is called a:", options: ["Pigsty", "Coop", "Kennel", "Hutch"], answer: 0 },
+        { q: "The deep litter system is used in:", options: ["Bee keeping", "Poultry production", "Fish farming", "Crop farming"], answer: 1 },
+        { q: "A breed of chicken kept mainly for meat is the:", options: ["Guinea fowl", "Layer", "Bantam only", "Broiler"], answer: 3 },
+        { q: "The fatty tissue and other products obtained from slaughtered animals are called:", options: ["Feeds", "By-products", "Fertilisers", "Medicines only"], answer: 1 },
+        { q: "The practice of keeping bees for honey is:", options: ["Floriculture", "Sericulture", "Apiculture", "Aquaculture"], answer: 2 },
+        { q: "The culture of rearing fish in controlled water is:", options: ["Aquaculture", "Apiculture", "Horticulture", "Forestry"], answer: 0 },
+        { q: "A fish commonly raised in ponds in Nigeria is:", options: ["Dolphin", "Tilapia", "Shark", "Whale"], answer: 1 },
+        { q: "The branch of agriculture that deals with managing and using forests is:", options: ["Aquaculture", "Poultry", "Forestry", "Pedology"], answer: 2 },
+        { q: "An example of a forest product is:", options: ["Timber", "Cattle", "Maize", "Cassava"], answer: 0 },
+        { q: "The planting of trees on a land that has not been forested before is:", options: ["Deforestation", "Erosion", "Reforestation", "Afforestation"], answer: 3 },
+        { q: "The price of an agricultural product rises when:", options: ["Demand is higher than supply", "Supply is unlimited", "Demand is zero", "Supply is higher than demand"], answer: 0 },
+        { q: "A cooperative society helps farmers by:", options: ["Taking their land", "Reducing their income", "Providing loans and marketing of produce", "Closing farms"], answer: 2 },
+        { q: "Record keeping on a farm helps the farmer to:", options: ["Know profit or loss and plan ahead", "Waste time", "Reduce yield", "Avoid taxes illegally"], answer: 0 },
+        { q: "A tractor is an example of a:", options: ["Farm animal", "Seed", "Farm machine", "Hand tool"], answer: 2 },
+        { q: "Which of the following is a safety measure when applying pesticides?", options: ["Eating while spraying", "Spraying against the wind", "Mixing with bare hands", "Wearing protective clothing"], answer: 3 },
+        { q: "Which of these is a perennial (long-lived) crop?", options: ["Cowpea", "Tomato", "Oil palm", "Maize"], answer: 2 }
+      ],
+      "Home Economics": [
+        { q: "The nutrient that is the body's main source of energy is:", options: ["Vitamins", "Minerals", "Proteins", "Carbohydrates"], answer: 3 },
+        { q: "Which nutrient is needed mainly for body building and repair?", options: ["Fibre", "Carbohydrate", "Protein", "Fat"], answer: 2 },
+        { q: "A diet that supplies all nutrients in the right amounts is a:", options: ["Fad diet", "Crash diet", "Balanced diet", "Starvation diet"], answer: 2 },
+        { q: "Deficiency of vitamin A causes:", options: ["Night blindness", "Scurvy", "Rickets", "Beriberi"], answer: 0 },
+        { q: "Deficiency of vitamin B1 (thiamine) causes:", options: ["Rickets", "Beriberi", "Pellagra", "Scurvy"], answer: 1 },
+        { q: "Which mineral is needed for strong bones and teeth?", options: ["Iodine", "Sodium", "Iron", "Calcium"], answer: 3 },
+        { q: "The mineral that prevents goitre is:", options: ["Iodine", "Iron", "Calcium", "Zinc"], answer: 0 },
+        { q: "Which of the following is a rich source of dietary fibre?", options: ["Soft drinks", "Whole grains and vegetables", "Refined sugar", "Butter"], answer: 1 },
+        { q: "Kwashiorkor is caused by a lack of:", options: ["Vitamin C", "Iron", "Protein", "Calcium"], answer: 2 },
+        { q: "The condition caused by an excessive intake of food that leads to excess body weight is:", options: ["Marasmus", "Obesity", "Goitre", "Anaemia"], answer: 1 },
+        { q: "Cooking meat slowly in liquid in a covered pot is called:", options: ["Stewing", "Roasting", "Frying", "Grilling"], answer: 0 },
+        { q: "Cooking food by exposing it directly to a heat source such as hot coals is:", options: ["Steaming", "Boiling", "Grilling", "Stewing"], answer: 2 },
+        { q: "The cooking method that retains the most water-soluble vitamins is:", options: ["Roasting", "Steaming", "Boiling for long", "Deep frying"], answer: 1 },
+        { q: "Which raising agent is produced by living organisms and used in bread making?", options: ["Cream of tartar", "Bicarbonate of soda", "Yeast", "Baking powder"], answer: 2 },
+        { q: "The ingredient that gives structure to cakes through protein is:", options: ["Eggs", "Sugar", "Salt", "Butter"], answer: 0 },
+        { q: "The cake-making method in which butter and sugar are beaten until creamy is the:", options: ["All-in-one method", "Creaming method", "Rubbing-in method", "Whisking method"], answer: 1 },
+        { q: "The rubbing-in method is commonly used for making:", options: ["Pastry and scones", "Meringues", "Jellies", "Sponge cakes using whisking"], answer: 0 },
+        { q: "Which of the following is a safe way to store raw meat in a refrigerator?", options: ["On the top shelf uncovered", "Next to cooked food uncovered", "On the bottom shelf in a covered container", "On the door only"], answer: 2 },
+        { q: "Food poisoning is commonly caused by:", options: ["Salt", "Bacteria in contaminated food", "Plain water", "Overcooking"], answer: 1 },
+        { q: "The temperature range called the 'danger zone' for bacterial growth is about:", options: ["70 °C to 100 °C", "5 °C to 63 °C", "100 °C to 200 °C", "−18 °C to 0 °C"], answer: 1 },
+        { q: "Which of the following is a method of food preservation using salt?", options: ["Curing", "Pasteurisation", "Canning", "Freezing"], answer: 0 },
+        { q: "Heating milk to kill harmful bacteria without changing its taste is:", options: ["Evaporation", "Pasteurisation", "Homogenisation", "Fermentation"], answer: 1 },
+        { q: "The natural fibre obtained from the cotton plant is:", options: ["Silk", "Cotton", "Nylon", "Wool"], answer: 1 },
+        { q: "Which of these is a synthetic fibre?", options: ["Wool", "Polyester", "Cotton", "Linen"], answer: 1 },
+        { q: "Wool comes from:", options: ["Flax plant", "Cotton plant", "Silkworms", "Sheep"], answer: 3 },
+        { q: "The fabric that is best for hot weather because it absorbs sweat is:", options: ["Nylon", "Cotton", "Polyester", "Plastic"], answer: 1 },
+        { q: "Which of these is a weaving pattern (basic weave)?", options: ["Hem", "Chain stitch", "Pleat", "Plain weave"], answer: 3 },
+        { q: "The part of a sewing machine that holds the lower thread is the:", options: ["Needle plate", "Bobbin", "Presser foot", "Hand wheel"], answer: 1 },
+        { q: "A line of stitches made to hold two pieces of fabric together permanently is a:", options: ["Dart", "Seam", "Pleat", "Hem"], answer: 1 },
+        { q: "A dart in a garment is used to:", options: ["Join sleeves", "Hold buttons", "Shape the fabric to fit the body", "Decorate the edges"], answer: 2 },
+        { q: "The edge of fabric that is folded and stitched to prevent fraying is a:", options: ["Dart", "Gather", "Yoke", "Hem"], answer: 3 },
+        { q: "The process of removing creases from clothes using heat is:", options: ["Dry cleaning", "Dyeing", "Starching", "Ironing"], answer: 3 },
+        { q: "A laundry label with a triangle crossed out means:", options: ["Iron on high", "Dry clean", "Do not bleach", "Tumble dry"], answer: 2 },
+        { q: "A stain from grease on a shirt is best removed with:", options: ["Cold water only", "Sugar", "Salt only", "Detergent and warm water"], answer: 3 },
+        { q: "A family budget is a plan that shows:", options: ["Expected income and expenditure", "Types of food only", "Names of relatives", "Time of meals"], answer: 0 },
+        { q: "Money kept aside from income for future use is:", options: ["Tax", "Debt", "Expenditure", "Savings"], answer: 3 },
+        { q: "Which of the following is a variable expense in a household?", options: ["Insurance premium", "Food", "Mortgage", "House rent"], answer: 1 },
+        { q: "A good consumer should always check the:", options: ["Weather", "Colour of the shop", "Name of the seller only", "Expiry date and quality of goods"], answer: 3 },
+        { q: "Consumer rights are protected in Nigeria by the:", options: ["Consumer Protection Council", "Customs", "Army", "Police only"], answer: 0 },
+        { q: "A balanced meal for a child should include foods from:", options: ["One food group", "All food groups", "Only fats", "Only sweets"], answer: 1 },
+        { q: "Which of the following is good for kitchen hygiene?", options: ["Wiping dishes with a dirty cloth", "Washing hands before handling food", "Using the same board for raw and cooked food", "Leaving waste uncovered"], answer: 1 },
+        { q: "The correct way to deal with a minor kitchen burn is to:", options: ["Apply toothpaste", "Hold it under cool running water", "Apply ice directly", "Burst blisters"], answer: 1 },
+        { q: "A kitchen fire caused by cooking oil should be put out by:", options: ["Fanning it", "Covering with a damp cloth or lid", "Blowing on it", "Pouring water"], answer: 1 },
+        { q: "The study of how to take care of the home and family is:", options: ["Mechanics", "Agriculture", "Home management", "Carpentry"], answer: 2 },
+        { q: "An example of a home appliance that converts electrical energy to heat is a:", options: ["Fan", "Electric iron", "Refrigerator", "Radio"], answer: 1 },
+        { q: "The best place to keep hot pots away from children is:", options: ["Out of reach on the cooker with handles turned inward", "At the edge of the table", "On the floor", "Beside the door"], answer: 0 },
+        { q: "Which of these is a function of the family?", options: ["Collecting taxes", "Printing money", "Socialising children", "Making national laws"], answer: 2 },
+        { q: "The importance of table manners is to:", options: ["Eat quickly", "Waste food", "Show off", "Show respect and good upbringing"], answer: 3 },
+        { q: "A good colour combination for a decorated room is described by the:", options: ["Budget sheet", "Weather chart", "Colour wheel", "Time table"], answer: 2 },
+        { q: "An example of a time-saving kitchen appliance is a:", options: ["Broom", "Mat", "Blender", "Basket"], answer: 2 }
+      ],
+      "Physical & Health Education": [
+        { q: "The international body that governs football worldwide is:", options: ["FIFA", "FIBA", "CAF", "IAAF"], answer: 0 },
+        { q: "The number of players of a football team on the field at one time is:", options: ["9", "12", "10", "11"], answer: 3 },
+        { q: "A free kick given for a serious foul inside the penalty area is called a:", options: ["Goal kick", "Penalty kick", "Corner kick", "Throw-in"], answer: 1 },
+        { q: "In football, a player is 'offside' when:", options: ["He is nearer to the opponents' goal line than the ball and second-last defender at the time of the pass", "He touches the ball twice", "He heads the ball", "He kicks the ball out"], answer: 0 },
+        { q: "In basketball, a player who holds the ball and walks without dribbling commits a:", options: ["Jump ball", "Double dribble", "Foul only", "Travelling violation"], answer: 3 },
+        { q: "The number of points for a shot made outside the three-point line in basketball is:", options: ["1", "3", "2", "4"], answer: 1 },
+        { q: "The number of sets a team must win to win a standard volleyball match (best of five) is:", options: ["4", "2", "5", "3"], answer: 3 },
+        { q: "In volleyball, a team is allowed a maximum of how many touches before returning the ball?", options: ["4", "5", "3", "2"], answer: 2 },
+        { q: "In track and field, which event is a combined event?", options: ["Marathon", "Hurdles", "Relay", "Decathlon"], answer: 3 },
+        { q: "The throwing event that uses a heavy metal ball is the:", options: ["Javelin", "Shot put", "Discus", "Hammer"], answer: 1 },
+        { q: "The shortest sprint event in Olympic track racing is:", options: ["800 metres", "400 metres", "200 metres", "100 metres"], answer: 3 },
+        { q: "The distance of a full marathon is about:", options: ["10 kilometres", "42 kilometres", "21 kilometres", "100 kilometres"], answer: 1 },
+        { q: "The baton in a relay race must be exchanged:", options: ["Anywhere on the track", "After finishing", "Before the race", "Within the take-over zone"], answer: 3 },
+        { q: "The Olympic Games were first held in ancient:", options: ["China", "Greece", "Egypt", "Rome"], answer: 1 },
+        { q: "Modern Olympic Games were revived by:", options: ["Baron Pierre de Coubertin", "Usain Bolt", "Michael Jordan", "Pele"], answer: 0 },
+        { q: "The warm-up before exercise is done to:", options: ["Cause cramps", "Make you tired", "Reduce flexibility", "Prepare the muscles and prevent injury"], answer: 3 },
+        { q: "The component of physical fitness that refers to the range of movement of a joint is:", options: ["Speed", "Flexibility", "Strength", "Endurance"], answer: 1 },
+        { q: "Cardiovascular endurance can best be improved by:", options: ["Lifting one heavy weight a day", "Sitting for long", "Watching sports", "Jogging or swimming regularly"], answer: 3 },
+        { q: "The ability to exert maximum force in a single effort is:", options: ["Flexibility", "Endurance", "Agility", "Muscular strength"], answer: 3 },
+        { q: "The three body types in somatotype classification are:", options: ["Ectomorph, mesomorph and endomorph", "Fat, thin and strong", "Red, blue and green", "Tall, short and medium"], answer: 0 },
+        { q: "A sprain is an injury to a:", options: ["Ligament", "Muscle only", "Nerve", "Bone"], answer: 0 },
+        { q: "A strain is an injury to a:", options: ["Skin", "Ligament", "Bone", "Muscle or tendon"], answer: 3 },
+        { q: "In first aid, a person who has fainted should be:", options: ["Made to stand", "Splashed with hot water", "Laid down with legs raised slightly", "Given food immediately"], answer: 2 },
+        { q: "The first aid for severe bleeding is to:", options: ["Apply oil", "Apply firm pressure with a clean cloth", "Ignore it", "Remove the cloth often"], answer: 1 },
+        { q: "The first aid treatment for a fracture is to:", options: ["Make the person walk", "Massage the limb", "Immobilise the limb and seek medical help", "Straighten the bone forcefully"], answer: 2 },
+        { q: "CPR is given to a person whose:", options: ["Heart and breathing have stopped", "Nose is blocked", "Leg is bruised", "Hand is sprained"], answer: 0 },
+        { q: "A balanced diet for athletes should be rich in:", options: ["Fizzy drinks", "Carbohydrates, proteins and water", "Alcohol", "Sweets only"], answer: 1 },
+        { q: "The use of banned substances to enhance sports performance is called:", options: ["Coaching", "Training", "Doping", "Warm-up"], answer: 2 },
+        { q: "The organisation that fights doping in sports worldwide is:", options: ["FIFA", "FIBA", "WADA", "UEFA"], answer: 2 },
+        { q: "Regular exercise reduces the risk of:", options: ["Heart disease and obesity", "Better sleep", "Good posture", "Strong muscles"], answer: 0 },
+        { q: "Which of these is a communicable disease?", options: ["Diabetes", "Hypertension", "Cancer", "Tuberculosis"], answer: 3 },
+        { q: "Which of the following is a non-communicable disease?", options: ["Hypertension", "Cholera", "Measles", "Malaria"], answer: 0 },
+        { q: "The disease spread by contaminated water and causing watery diarrhoea is:", options: ["Polio", "Cholera", "Mumps", "Tetanus"], answer: 1 },
+        { q: "Adolescence is the stage of life between:", options: ["Birth and walking", "Infancy and toddlerhood", "Childhood and adulthood", "Adulthood and old age"], answer: 2 },
+        { q: "A change during puberty in boys is:", options: ["Growth of the mammary glands", "Shrinking height", "Breaking of the voice", "Menstruation"], answer: 2 },
+        { q: "Menstruation in girls normally begins during:", options: ["Old age", "Infancy", "Toddlerhood", "Puberty"], answer: 3 },
+        { q: "Which of the following is a safe way to avoid sexually transmitted infections?", options: ["Multiple partners", "Abstinence", "Sharing needles", "Ignoring symptoms"], answer: 1 },
+        { q: "Drug abuse can cause:", options: ["Addiction and damage to the brain and liver", "Longer life", "Better health", "Sharper memory"], answer: 0 },
+        { q: "An example of a stimulant drug that is widely used and found in tea and coffee is:", options: ["Codeine", "Heroin", "Morphine", "Caffeine"], answer: 3 },
+        { q: "Smoking mainly harms the:", options: ["Hair only", "Lungs", "Nails only", "Bones only"], answer: 1 },
+        { q: "Personal hygiene includes:", options: ["Skipping meals", "Wearing dirty clothes", "Regular bathing and oral care", "Sharing combs"], answer: 2 },
+        { q: "Environmental sanitation includes:", options: ["Open defecation", "Dumping refuse in gutters", "Letting stagnant water stay", "Proper refuse disposal and clean drainage"], answer: 3 },
+        { q: "The game of table tennis is played with a:", options: ["Small celluloid ball and bat", "Racket and net ball", "Shuttlecock", "Puck"], answer: 0 },
+        { q: "In badminton, the serve must be hit:", options: ["Below the server's waist", "On the net", "Behind the back", "Above the head"], answer: 0 },
+        { q: "A gymnastic apparatus used for swinging with both hands is the:", options: ["Parallel bars", "Springboard only", "Vaulting horse", "Balance beam"], answer: 0 },
+        { q: "Which of the following is a combat sport?", options: ["Hockey", "Golf", "Judo", "Rowing"], answer: 2 },
+        { q: "The official who controls a match is the:", options: ["Referee", "Coach", "Spectator", "Manager"], answer: 0 },
+        { q: "Sportsmanship means:", options: ["Cheating", "Winning at all cost", "Playing fairly and respecting opponents", "Abusing the referee"], answer: 2 },
+        { q: "The recommended minimum amount of daily physical activity for school-age children is about:", options: ["10 minutes", "3 hours", "60 minutes", "5 minutes"], answer: 2 },
+        { q: "The Olympic motto 'Citius, Altius, Fortius' means:", options: ["Faster, Higher, Stronger", "Quick, Brave, Loyal", "Bigger, Better, Best", "Together, Stronger, Longer"], answer: 0 }
+      ],
+      "music": [
+        { q: "How many lines and spaces does the musical staff have?", options: ["4 lines and 4 spaces", "5 lines and 5 spaces", "5 lines and 4 spaces", "4 lines and 5 spaces"], answer: 2 },
+        { q: "The clef that is commonly used for high-pitched instruments and voices is the:", options: ["Tenor clef", "Bass clef", "Alto clef", "Treble clef"], answer: 3 },
+        { q: "The note names on the lines of the bass clef, from bottom to top, are:", options: ["F A C E G", "E G B D F", "A C E G B", "G B D F A"], answer: 3 },
+        { q: "The key signature of C major has:", options: ["One flat", "One sharp", "Two sharps", "No sharps or flats"], answer: 3 },
+        { q: "The key signature of G major has:", options: ["Two sharps", "No sharps or flats", "One flat (B♭)", "One sharp (F♯)"], answer: 3 },
+        { q: "The key signature of F major has:", options: ["No flats", "One sharp (F♯)", "One flat (B♭)", "Two flats"], answer: 2 },
+        { q: "The time signature 6/8 is classified as:", options: ["Compound quadruple time", "Simple duple time", "Simple triple time", "Compound duple time"], answer: 3 },
+        { q: "The time signature 3/4 means:", options: ["Six crotchet beats per bar", "Three quaver beats per bar", "Four crotchet beats per bar", "Three crotchet beats per bar"], answer: 3 },
+        { q: "How many quavers are in one minim?", options: ["4", "8", "2", "3"], answer: 0 },
+        { q: "A dotted crotchet is equal in length to:", options: ["Two crotchets", "Two quavers only", "A crotchet plus a quaver", "A minim"], answer: 2 },
+        { q: "A rest of four beats in 4/4 time is:", options: ["A crotchet rest", "A minim rest", "A semibreve rest", "A quaver rest"], answer: 2 },
+        { q: "The distance between two notes is called an:", options: ["Chord", "Interval", "Scale", "Octave only"], answer: 1 },
+        { q: "The interval between C and the next C above is an:", options: ["Fourth", "Fifth", "Third", "Octave"], answer: 3 },
+        { q: "A chord made up of three notes is a:", options: ["Scale", "Octave", "Triad", "Interval"], answer: 2 },
+        { q: "The first note of a scale is called the:", options: ["Tonic", "Dominant", "Mediant", "Subdominant"], answer: 0 },
+        { q: "The fifth note of a scale is called the:", options: ["Mediant", "Leading note", "Tonic", "Dominant"], answer: 3 },
+        { q: "The tonic sol-fa name for the seventh note of the major scale is:", options: ["Fah", "Soh", "Te (Ti)", "Lah"], answer: 2 },
+        { q: "Dynamic marking 'mf' means:", options: ["Gradually soft", "Very soft", "Moderately loud", "Very loud"], answer: 2 },
+        { q: "The dynamic marking 'ff' means:", options: ["Very loud", "Very soft", "Moderately soft", "Loud"], answer: 0 },
+        { q: "The musical term 'andante' means:", options: ["At a walking pace", "Very fast", "Very slow", "Suddenly loud"], answer: 0 },
+        { q: "The musical term 'presto' means:", options: ["Very slow", "Gently", "Very fast", "Moderately slow"], answer: 2 },
+        { q: "The musical term 'ritardando' (rit.) means:", options: ["Getting softer", "Getting louder", "Gradually getting faster", "Gradually slowing down"], answer: 3 },
+        { q: "A dot placed above or below a note meaning to play it short and detached is:", options: ["Staccato", "Legato", "Fermata", "Tenuto"], answer: 0 },
+        { q: "Playing notes smoothly connected is called:", options: ["Staccato", "Legato", "Marcato", "Pizzicato"], answer: 1 },
+        { q: "A pause sign placed over a note is called a:", options: ["Fermata", "Slur", "Accent", "Tie"], answer: 0 },
+        { q: "A curved line joining notes of different pitch to be played smoothly is a:", options: ["Tie", "Clef", "Slur", "Bar line"], answer: 2 },
+        { q: "A repeated musical pattern played again and again is an:", options: ["Canon", "Coda", "Fugue", "Ostinato"], answer: 3 },
+        { q: "A song in which voices enter one after another singing the same melody is a:", options: ["Round (canon)", "Solo", "Hymn", "Ballad"], answer: 0 },
+        { q: "Singing without instrumental accompaniment is called:", options: ["Staccato", "Forte", "Solo", "A cappella"], answer: 3 },
+        { q: "The highest male voice is the:", options: ["Tenor", "Baritone", "Bass", "Alto"], answer: 0 },
+        { q: "The voice type between tenor and bass is the:", options: ["Soprano", "Alto", "Baritone", "Contralto"], answer: 2 },
+        { q: "A composition for four singers or players is a:", options: ["Quartet", "Quintet", "Trio", "Duet"], answer: 0 },
+        { q: "The instrument family that includes the violin and cello is the:", options: ["Percussion", "Strings", "Woodwind", "Brass"], answer: 1 },
+        { q: "The flute belongs to the:", options: ["Percussion family", "Woodwind family", "String family", "Brass family"], answer: 1 },
+        { q: "The Yoruba talking drum is called:", options: ["Ekwe", "Bata", "Dundun", "Udu"], answer: 2 },
+        { q: "The Igbo wooden slit drum is called:", options: ["Kakaki", "Dundun", "Ekwe", "Udu"], answer: 2 },
+        { q: "The Hausa two-stringed lute is called the:", options: ["Kakaki", "Shekere", "Goje", "Gong"], answer: 2 },
+        { q: "The long metal trumpet used by the Hausa for royal music is:", options: ["Algaita", "Kakaki", "Goje", "Ogene"], answer: 1 },
+        { q: "The Nigerian composer known as the father of Nigerian art music is:", options: ["Fela Sowande", "Ebenezer Obey", "Fela Kuti", "King Sunny Ade"], answer: 0 },
+        { q: "Which of these is a popular Nigerian music style created by Fela Anikulapo Kuti?", options: ["Juju", "Highlife", "Fuji", "Afrobeat"], answer: 3 },
+        { q: "The musical style associated with Ebenezer Obey and King Sunny Ade is:", options: ["Juju", "Apala", "Fuji", "Afrobeat"], answer: 0 },
+        { q: "Highlife music is mainly associated with:", options: ["India", "Jamaica", "Ghana and Nigeria", "Brazil"], answer: 2 },
+        { q: "A song sung in praise of God is called a:", options: ["Hymn", "Folk song", "Ballad", "Lullaby"], answer: 0 },
+        { q: "A soothing song sung to put a baby to sleep is a:", options: ["Lullaby", "War song", "Anthem", "Work song"], answer: 0 },
+        { q: "A song associated with a nation and sung on national occasions is an:", options: ["Anthem", "Round", "Lullaby", "Ballad"], answer: 0 },
+        { q: "A song sung by workers to make their work lighter is a:", options: ["Lullaby", "Work song", "Anthem", "Hymn"], answer: 1 },
+        { q: "The person who writes music is a:", options: ["Soloist", "Composer", "Conductor", "Critic"], answer: 1 },
+        { q: "The person who directs an orchestra is the:", options: ["Producer", "Soloist", "Conductor", "Composer"], answer: 2 },
+        { q: "An instrument that can be used to play chords and melody and has black and white keys is the:", options: ["Flute", "Drum", "Trumpet", "Piano"], answer: 3 },
+        { q: "The speed of a piece of music is its:", options: ["Harmony", "Timbre", "Pitch", "Tempo"], answer: 3 }
+      ],
+      "French": [
+        { q: "Complete: Nous ___ (parler) français en classe.", options: ["parlent", "parlez", "parle", "parlons"], answer: 3 },
+        { q: "Complete: Vous ___ (finir) vos devoirs.", options: ["finissent", "finissons", "finissez", "finis"], answer: 2 },
+        { q: "Complete: Ils ___ (vendre) des légumes au marché.", options: ["vendent", "vends", "vendons", "vendez"], answer: 0 },
+        { q: "Complete: Elle ___ (avoir) quinze ans.", options: ["a", "as", "ont", "ai"], answer: 0 },
+        { q: "Complete: Vous ___ (être) très gentils.", options: ["êtes", "sommes", "es", "sont"], answer: 0 },
+        { q: "Complete: Je ___ (aller) à l'école à pied.", options: ["va", "vais", "allons", "vas"], answer: 1 },
+        { q: "Complete: Nous ___ (faire) nos devoirs.", options: ["faisons", "fais", "font", "faites"], answer: 0 },
+        { q: "Complete: Tu ___ (prendre) le bus ?", options: ["prends", "prennent", "prenons", "prend"], answer: 0 },
+        { q: "Complete: Ils ___ (vouloir) jouer au football.", options: ["veux", "voulez", "veulent", "voulons"], answer: 2 },
+        { q: "Complete: Je ne ___ pas (savoir) la réponse.", options: ["sais", "sait", "savons", "savent"], answer: 0 },
+        { q: "How do you make this sentence negative? 'Il mange du pain.'", options: ["Il ne pas mange du pain.", "Il ne mange pas de pain.", "Il pas mange du pain.", "Il mange ne pas du pain."], answer: 1 },
+        { q: "Complete with the contracted article: Je vais ___ marché. (à + le)", options: ["aux", "du", "à la", "au"], answer: 3 },
+        { q: "Complete with the contracted article: Elle revient ___ cinéma. (de + le)", options: ["du", "de la", "au", "des"], answer: 0 },
+        { q: "Complete with the contracted article: Nous parlons ___ élèves. (à + les)", options: ["aux", "à la", "au", "des"], answer: 0 },
+        { q: "Choose the correct possessive: C'est ___ sœur. (my)", options: ["mon", "ma", "mes", "ta"], answer: 1 },
+        { q: "Choose the correct possessive: Ce sont ___ livres. (his/her)", options: ["son", "sa", "leur", "ses"], answer: 3 },
+        { q: "Choose the correct possessive: ___ parents habitent à Abuja. (our)", options: ["Vos", "Notre", "Leurs", "Nos"], answer: 3 },
+        { q: "The feminine form of 'petit' is:", options: ["petit", "petite", "petitte", "petits"], answer: 1 },
+        { q: "The plural of 'un cheval' is:", options: ["des chevales", "des chevaux", "des chevals", "les chevaux"], answer: 1 },
+        { q: "The plural of 'un journal' is:", options: ["des journales", "des journals", "des journaux", "les journal"], answer: 2 },
+        { q: "How do you say 'It is 8 o'clock' in French?", options: ["Il fait huit heures.", "C'est huit heure.", "Il a huit heures.", "Il est huit heures."], answer: 3 },
+        { q: "Translate: 'Where do you live?'", options: ["Comment habites-tu ?", "Qui habites-tu ?", "Où habites-tu ?", "Quand habites-tu ?"], answer: 2 },
+        { q: "Translate: 'Why are you late?'", options: ["Qui es-tu en retard ?", "Quand es-tu en retard ?", "Pourquoi es-tu en retard ?", "Comment es-tu en retard ?"], answer: 2 },
+        { q: "Translate: 'What time is it?'", options: ["Quelle heure est-il ?", "Comment vas-tu ?", "Où est-il ?", "Quel âge as-tu ?"], answer: 0 },
+        { q: "Translate: 'I am hungry.'", options: ["Je fais faim.", "J'ai faim.", "Je vais faim.", "Je suis faim."], answer: 1 },
+        { q: "Translate: 'I am cold.'", options: ["Je vais froid.", "Je suis froid.", "Je fais froid.", "J'ai froid."], answer: 3 },
+        { q: "Translate: 'The weather is fine today.'", options: ["Il a beau aujourd'hui.", "Il fait beau aujourd'hui.", "Il est beau aujourd'hui.", "Il va beau aujourd'hui."], answer: 1 },
+        { q: "What does 'Il neige' mean?", options: ["It is foggy.", "It is snowing.", "It is hot.", "It is windy."], answer: 1 },
+        { q: "The French word for 'doctor' is:", options: ["boulanger", "médecin", "maçon", "avocat"], answer: 1 },
+        { q: "The French word for 'baker' is:", options: ["boulanger", "boucher", "fermier", "épicier"], answer: 0 },
+        { q: "A shop where you buy meat in French is a:", options: ["librairie", "boucherie", "boulangerie", "pharmacie"], answer: 1 },
+        { q: "The French word for 'pharmacy' is:", options: ["librairie", "poste", "boulangerie", "pharmacie"], answer: 3 },
+        { q: "The French word for 'bookshop' is:", options: ["librairie", "bibliothèque", "pharmacie", "boucherie"], answer: 0 },
+        { q: "The French word for 'library' is:", options: ["librairie", "école", "salle", "bibliothèque"], answer: 3 },
+        { q: "The French word for 'head' is:", options: ["pied", "bras", "main", "tête"], answer: 3 },
+        { q: "The French word for 'hand' is:", options: ["jambe", "bras", "dos", "main"], answer: 3 },
+        { q: "The French word for 'trousers' is:", options: ["chemise", "robe", "pantalon", "jupe"], answer: 2 },
+        { q: "The French word for 'shirt' is:", options: ["chaussure", "chemise", "pantalon", "chapeau"], answer: 1 },
+        { q: "The French for 'turn left' is:", options: ["Tournez à gauche", "Allez tout droit", "Tournez à droite", "Traversez la rue"], answer: 0 },
+        { q: "The French for 'go straight on' is:", options: ["Tournez à droite", "Tournez à gauche", "Reculez", "Allez tout droit"], answer: 3 },
+        { q: "The French word for 'mathematics' is:", options: ["l'anglais", "l'histoire", "les mathématiques", "la géographie"], answer: 2 },
+        { q: "The French word for 'Thursday' is:", options: ["mercredi", "jeudi", "vendredi", "mardi"], answer: 1 },
+        { q: "The French word for 'August' is:", options: ["octobre", "juillet", "août", "avril"], answer: 2 },
+        { q: "Complete with the passé composé: Hier, j'___ mangé du riz.", options: ["suis", "avais", "ai été", "ai"], answer: 3 },
+        { q: "Complete: Demain, nous ___ voyager. (futur proche, aller)", options: ["vont", "allons", "avons", "sommes"], answer: 1 },
+        { q: "What is the French for 'my friend (female)'?", options: ["mes amie", "ma ami", "mon amie", "mon amis"], answer: 2 },
+        { q: "Which is the correct sentence?", options: ["Elles est contentes.", "Elles sommes contentes.", "Elles êtes contentes.", "Elles sont contentes."], answer: 3 },
+        { q: "Choose the correct subject pronoun: ___ habitent à Kano. (they, masculine)", options: ["Vous", "Elles", "Ils", "Nous"], answer: 2 },
+        { q: "The French word for 'because' is:", options: ["parce que", "donc", "avant que", "pour que"], answer: 0 },
+        { q: "'Il y a' in French means:", options: ["It goes", "There is / there are", "He has", "He is there only"], answer: 1 }
+      ],
+      "CRS": [
+        { q: "Which book of the Bible records the creation of the world?", options: ["Genesis", "Psalms", "Exodus", "Matthew"], answer: 0 },
+        { q: "According to Genesis, God created human beings in his own:", options: ["Name", "Image", "Strength", "Likeness of animals"], answer: 1 },
+        { q: "What did God command Adam not to eat in the Garden of Eden?", options: ["Fruit of the tree of life", "Fish", "Any vegetables", "Fruit of the tree of knowledge of good and evil"], answer: 3 },
+        { q: "Who tempted Eve to eat the forbidden fruit?", options: ["The serpent", "Adam", "An angel", "Cain"], answer: 0 },
+        { q: "The first murder recorded in the Bible was committed by:", options: ["Cain", "Abel", "Lamech", "Esau"], answer: 0 },
+        { q: "God called Abraham from which city?", options: ["Ur of the Chaldeans", "Babylon", "Nineveh", "Jerusalem"], answer: 0 },
+        { q: "God made a covenant with Abraham promising him:", options: ["Many descendants and a land", "Eternal youth", "Gold and silver", "A palace"], answer: 0 },
+        { q: "The sign of the covenant between God and Abraham was:", options: ["The Passover", "The rainbow", "The Sabbath", "Circumcision"], answer: 3 },
+        { q: "Isaac's wife was:", options: ["Sarah", "Leah", "Rachel", "Rebecca"], answer: 3 },
+        { q: "Jacob's name was changed to Israel after he:", options: ["Built an altar at Bethel", "Wrestled with an angel", "Met Esau", "Left Haran"], answer: 1 },
+        { q: "Joseph's brothers sold him because they were:", options: ["Angry with Pharaoh", "Hungry", "Jealous of him", "Poor"], answer: 2 },
+        { q: "Who interpreted Pharaoh's dreams in Egypt?", options: ["Moses", "Joseph", "Aaron", "Daniel"], answer: 1 },
+        { q: "Moses was hidden as a baby in a basket among the reeds of the:", options: ["Red Sea", "River Nile", "Euphrates", "River Jordan"], answer: 1 },
+        { q: "God spoke to Moses from a:", options: ["Whirlwind", "Temple", "Burning bush", "Cloud only"], answer: 2 },
+        { q: "The Israelites crossed which sea on dry ground when leaving Egypt?", options: ["Mediterranean Sea", "Dead Sea", "Red Sea", "Sea of Galilee"], answer: 2 },
+        { q: "The Ten Commandments were given at:", options: ["Mount Hermon", "Mount Carmel", "Mount Zion", "Mount Sinai"], answer: 3 },
+        { q: "The first of the Ten Commandments says:", options: ["You shall not kill", "Remember the Sabbath day", "Honour your father and mother", "You shall have no other gods before me"], answer: 3 },
+        { q: "The food God provided for the Israelites in the wilderness was:", options: ["Bread of the temple", "Manna", "Barley", "Locusts only"], answer: 1 },
+        { q: "Who led the Israelites into the Promised Land after Moses?", options: ["Caleb", "Aaron", "Gideon", "Joshua"], answer: 3 },
+        { q: "Gideon defeated the Midianites with how many men?", options: ["3,000", "12,000", "30", "300"], answer: 3 },
+        { q: "Ruth was loyal to her mother-in-law named:", options: ["Naomi", "Deborah", "Orpah", "Hannah"], answer: 0 },
+        { q: "Hannah prayed to God for a child and gave birth to:", options: ["Samuel", "Samson", "Solomon", "Saul"], answer: 0 },
+        { q: "Samuel anointed which man as the first king of Israel?", options: ["Jonathan", "Saul", "Solomon", "David"], answer: 1 },
+        { q: "David was a shepherd from the town of:", options: ["Jerusalem", "Bethlehem", "Nazareth", "Bethany"], answer: 1 },
+        { q: "David showed his sin against Uriah when he took Bathsheba. Which prophet rebuked him?", options: ["Samuel", "Nathan", "Gad", "Elijah"], answer: 1 },
+        { q: "King Solomon built the temple in:", options: ["Jerusalem", "Samaria", "Shiloh", "Bethel"], answer: 0 },
+        { q: "The prophet who challenged the prophets of Baal on Mount Carmel was:", options: ["Jeremiah", "Elisha", "Isaiah", "Elijah"], answer: 3 },
+        { q: "Who became prophet after Elijah?", options: ["Elisha", "Isaiah", "Amos", "Hosea"], answer: 0 },
+        { q: "The prophet who saw a vision in the temple and said 'Here am I, send me' was:", options: ["Ezekiel", "Jeremiah", "Amos", "Isaiah"], answer: 3 },
+        { q: "The kingdom of Israel was divided after the death of:", options: ["Solomon", "David", "Saul", "Rehoboam"], answer: 0 },
+        { q: "The Jews were taken captive to Babylon by:", options: ["Darius", "Nebuchadnezzar", "Cyrus", "Pharaoh Necho"], answer: 1 },
+        { q: "Daniel was thrown into the lions' den because he:", options: ["Stole food", "Prayed to God despite the king's decree", "Refused to pay taxes", "Insulted the king"], answer: 1 },
+        { q: "The angel who announced the birth of Jesus to Mary was:", options: ["Uriel", "Michael", "Raphael", "Gabriel"], answer: 3 },
+        { q: "Jesus was born during the reign of Emperor:", options: ["Tiberius", "Caesar Augustus", "Nero", "Julius Caesar"], answer: 1 },
+        { q: "The wise men from the East followed a:", options: ["Angel", "Mountain", "Cloud", "Star"], answer: 3 },
+        { q: "The Sermon on the Mount is found mainly in the Gospel of:", options: ["Matthew", "Luke", "Mark", "John"], answer: 0 },
+        { q: "The Golden Rule says:", options: ["Do not worry about tomorrow", "Love money", "Do to others what you would want them to do to you", "Honour the Sabbath"], answer: 2 },
+        { q: "Which parable teaches about being a good neighbour?", options: ["The Sower", "The Mustard Seed", "The Good Samaritan", "The Lost Coin"], answer: 2 },
+        { q: "In the parable of the sower, the seed that fell on good soil represents:", options: ["Those who reject it", "Those who are distracted by riches", "Those who hear the word and bear fruit", "Those who forget it"], answer: 2 },
+        { q: "Jesus raised which man from the dead after four days?", options: ["Tabitha", "Lazarus", "Eutychus", "Jairus' daughter"], answer: 1 },
+        { q: "The disciple who doubted Jesus' resurrection until he saw the wounds was:", options: ["Andrew", "Peter", "Philip", "Thomas"], answer: 3 },
+        { q: "The fruit of the Spirit listed in Galatians includes:", options: ["Money, fame and power", "Sleep, play and food", "Love, joy and peace", "Pride, envy and anger"], answer: 2 },
+        { q: "The Holy Spirit came upon the apostles on the day of:", options: ["Tabernacles", "Passover", "Atonement", "Pentecost"], answer: 3 },
+        { q: "Who was chosen to replace Judas Iscariot among the twelve apostles?", options: ["Matthias", "Barnabas", "Timothy", "Silas"], answer: 0 },
+        { q: "Saul of Tarsus was converted on the road to:", options: ["Jerusalem", "Antioch", "Damascus", "Corinth"], answer: 2 },
+        { q: "Paul wrote most of his letters to:", options: ["Roman soldiers", "Kings", "Churches and individuals", "Jewish priests only"], answer: 2 },
+        { q: "The book of Acts of the Apostles was written by:", options: ["Paul", "Luke", "John", "Peter"], answer: 1 },
+        { q: "The Christian virtue of giving help to the poor and needy is:", options: ["Pride", "Greed", "Vengeance", "Charity"], answer: 3 },
+        { q: "Which of the following is the greatest commandment according to Jesus?", options: ["Keep the Sabbath only", "Offer sacrifices", "Love the Lord your God with all your heart", "Pay tithes only"], answer: 2 },
+        { q: "Which disciple denied Jesus three times before the cock crowed?", options: ["John", "James", "Peter", "Thomas"], answer: 2 }
+      ],
+      "Business Studies": [
+        { q: "The activity of buying and selling goods and services to make a profit is called:", options: ["Consumption", "Business", "Saving", "Charity"], answer: 1 },
+        { q: "The branch of business concerned with the movement of goods from producers to consumers is:", options: ["Banking only", "Accounting", "Production", "Commerce"], answer: 3 },
+        { q: "Which of the following is an example of a primary production activity?", options: ["Printing books", "Baking bread", "Fishing", "Selling clothes"], answer: 2 },
+        { q: "Making raw materials into finished goods is called:", options: ["Retailing", "Insurance", "Mining", "Manufacturing"], answer: 3 },
+        { q: "Services that help trade to be carried out, such as banking, insurance and transport, are called:", options: ["Secondary production", "Primary production", "Aids to trade", "Direct services only"], answer: 2 },
+        { q: "A trader who buys goods in large quantities from manufacturers and sells to retailers is a:", options: ["Retailer", "Consumer", "Wholesaler", "Hawker"], answer: 2 },
+        { q: "A trader who sells goods in small quantities directly to consumers is a:", options: ["Retailer", "Importer", "Manufacturer", "Wholesaler"], answer: 0 },
+        { q: "A retailer who moves from place to place selling goods is a:", options: ["Hawker", "Agent", "Wholesaler", "Supermarket owner"], answer: 0 },
+        { q: "Which of these is a large retail shop that sells many types of goods under one roof?", options: ["Warehouse", "Kiosk", "Supermarket", "Stall"], answer: 2 },
+        { q: "The trade between two or more countries is:", options: ["Foreign trade", "Home trade", "Wholesale trade", "Barter"], answer: 0 },
+        { q: "The goods a country sells to other countries are called:", options: ["Services", "Exports", "Raw materials", "Imports"], answer: 1 },
+        { q: "A tax placed on imported goods is a:", options: ["Poll tax", "Property tax", "Customs duty (tariff)", "Income tax"], answer: 2 },
+        { q: "The direct exchange of goods for goods without using money is:", options: ["Credit sale", "Retail", "Barter", "Auction"], answer: 2 },
+        { q: "A document sent by a seller to a buyer showing goods supplied and the amount due is a/an:", options: ["Statement of account", "Receipt", "Invoice", "Cheque"], answer: 2 },
+        { q: "A document given to a buyer as proof of payment is a:", options: ["Receipt", "Invoice", "Order form", "Debit note"], answer: 0 },
+        { q: "A document sent by a buyer to a seller to request goods is a/an:", options: ["Invoice", "Credit note", "Order (purchase order)", "Receipt"], answer: 2 },
+        { q: "A document issued by a seller to reduce the amount owed by a buyer because of returned goods is a:", options: ["Debit note", "Receipt", "Invoice", "Credit note"], answer: 3 },
+        { q: "The book in which cash receipts and payments are first recorded is the:", options: ["Cash book", "Purchases book", "Ledger", "Journal only"], answer: 0 },
+        { q: "In book-keeping, anything of value owned by a business is an:", options: ["Expense", "Capital", "Asset", "Liability"], answer: 2 },
+        { q: "Money owed by a business to others is a:", options: ["Liability", "Profit", "Asset", "Income"], answer: 0 },
+        { q: "The money invested in a business by the owner is the:", options: ["Capital", "Debtor", "Liability", "Drawings"], answer: 0 },
+        { q: "A person who owes a business money is called a:", options: ["Shareholder", "Debtor", "Supplier", "Creditor"], answer: 1 },
+        { q: "A person to whom a business owes money is a:", options: ["Customer", "Shareholder", "Debtor", "Creditor"], answer: 3 },
+        { q: "The system of recording each transaction as a debit in one account and a credit in another is:", options: ["Inventory control", "Double-entry book-keeping", "Cost accounting only", "Single-entry book-keeping"], answer: 1 },
+        { q: "A business has assets of ₦500,000 and liabilities of ₦200,000. The capital is:", options: ["₦100,000", "₦700,000", "₦300,000", "₦200,000"], answer: 2 },
+        { q: "A business sells goods for ₦80,000 which cost ₦60,000. The gross profit is:", options: ["₦80,000", "₦140,000", "₦60,000", "₦20,000"], answer: 3 },
+        { q: "Profit is calculated as:", options: ["Revenue minus expenses", "Expenses minus revenue", "Capital minus assets", "Revenue plus expenses"], answer: 0 },
+        { q: "A business owned and managed by one person is a:", options: ["Sole proprietorship", "Cooperative society", "Limited liability company", "Partnership"], answer: 0 },
+        { q: "A business owned by two or more people who share profits is a:", options: ["Public company", "Partnership", "Public corporation", "Sole proprietorship"], answer: 1 },
+        { q: "The owners of a limited liability company are called:", options: ["Shareholders", "Debtors", "Partners", "Directors only"], answer: 0 },
+        { q: "A business owned and controlled by members who join together for mutual benefit is a:", options: ["Cooperative society", "Partnership", "Public corporation", "Sole proprietorship"], answer: 0 },
+        { q: "A business owned by the government is a:", options: ["Cooperative", "Public corporation", "Private company", "Partnership"], answer: 1 },
+        { q: "An institution that accepts deposits from customers and grants loans is a:", options: ["Stock exchange", "Market", "Bank", "Insurance company"], answer: 2 },
+        { q: "A written order to a bank to pay a stated sum from a customer's account is a:", options: ["Debit note", "Receipt", "Cheque", "Invoice"], answer: 2 },
+        { q: "The type of bank account that is mainly used for day-to-day transactions and allows cheque withdrawals is the:", options: ["Current account", "Fixed deposit account", "Savings account", "Domiciliary account"], answer: 0 },
+        { q: "The money paid by a customer to an insurance company for insurance cover is the:", options: ["Interest", "Claim", "Premium", "Dividend"], answer: 2 },
+        { q: "The principle that an insured person should be restored to the same financial position after a loss, but not gain, is:", options: ["Contribution", "Insurable interest", "Subrogation", "Indemnity"], answer: 3 },
+        { q: "The type of insurance that covers loss of buildings due to burning is:", options: ["Marine insurance", "Motor insurance", "Life insurance", "Fire insurance"], answer: 3 },
+        { q: "The mode of transport that is cheapest for carrying heavy and bulky goods over long distances is:", options: ["Pipeline only", "Air transport", "Water transport", "Road transport"], answer: 2 },
+        { q: "The mode of transport that is fastest for carrying perishable goods over long distances is:", options: ["Road transport", "Rail transport", "Water transport", "Air transport"], answer: 3 },
+        { q: "A place where goods are stored until they are needed is a:", options: ["Kiosk", "Showroom", "Warehouse", "Market"], answer: 2 },
+        { q: "The process of making a product known to the public to attract buyers is:", options: ["Advertising", "Warehousing", "Insurance", "Packaging"], answer: 0 },
+        { q: "An example of a medium of advertising is:", options: ["Cheque", "Radio", "Invoice", "Receipt"], answer: 1 },
+        { q: "The activities involved in making goods available to consumers, including pricing, promotion and distribution, are called:", options: ["Banking", "Typing", "Marketing", "Accounting"], answer: 2 },
+        { q: "A person who starts and runs a business, taking the risk, is an:", options: ["Employee", "Consumer", "Entrepreneur", "Customer"], answer: 2 },
+        { q: "A good quality of a successful entrepreneur is:", options: ["Dishonesty", "Laziness", "Fear of risk", "Honesty and hard work"], answer: 3 },
+        { q: "The activity of recording letters and papers so that they can be found easily is:", options: ["Typing", "Filing", "Printing", "Posting"], answer: 1 },
+        { q: "A machine used in offices to make several copies of documents is a:", options: ["Photocopier", "Telephone", "Franking machine", "Calculator"], answer: 0 },
+        { q: "The market in which shares and bonds are bought and sold is the:", options: ["Stock exchange", "Central bank", "Wholesale market", "Warehouse"], answer: 0 },
+        { q: "A person who sells goods for a manufacturer in return for a commission is an:", options: ["Debtor", "Consumer", "Retailer", "Agent"], answer: 3 }
+      ]
+    };
+
+    let playerName = "Student";
+    let selectedSubject = "";
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let timeLeft = 30 * 60; // 30 mins for 50 questions
+    let timerInterval = null;
+
+    // Shuffle options helper
+    function shuffleOptions(item) {
+      const originalCorrectOption = item.options[item.answer];
+      let mappedOptions = item.options.map((opt) => opt);
+      
+      for (let i = mappedOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
+      }
+
+      const newAnswerIndex = mappedOptions.indexOf(originalCorrectOption);
+
+      return {
+        q: item.q,
+        options: mappedOptions,
+        answer: newAnswerIndex
+      };
+    }
+
+    function openSubjectSelection() {
+      const nameInput = document.getElementById("player-name").value.trim();
+      if (!nameInput && playerName === "Student") {
+        showDialog("Please enter your name before proceeding!");
+        return;
+      } else if (nameInput) {
+        playerName = nameInput;
+      }
+
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("subject-screen").style.display = "block";
+
+      const container = document.getElementById("subject-buttons-container");
+      container.innerHTML = "";
+
+      const subjects = Object.keys(juniorClassSubjects);
+
+      subjects.forEach((subj) => {
+        const btn = document.createElement("button");
+        btn.className = "start-btn";
+        let displayName = subj.charAt(0).toUpperCase() + subj.slice(1);
+        btn.innerText = `${displayName} (50 Questions)`;
+        btn.onclick = () => startSubjectQuiz(subj);
+        container.appendChild(btn);
+      });
+    }
+
+    function startSubjectQuiz(subjectName) {
+      selectedSubject = subjectName;
+
+      document.getElementById("subject-screen").style.display = "none";
+      document.getElementById("score-screen").style.display = "none";
+      document.getElementById("quiz-screen").style.display = "block";
+
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      document.getElementById("current-stage-tag").innerText = `JUNIOR CLASS • ${displaySubjName}`;
+
+      const rawQuestions = juniorClassSubjects[selectedSubject];
+      
+      // Shuffle questions & options
+      questions = rawQuestions
+        .map(q => shuffleOptions(q))
+        .sort(() => Math.random() - 0.5);
+
+      timeLeft = 30 * 60; // 30 minutes
+      userAnswers = new Array(questions.length).fill(null);
+      currentQuestionIndex = 0;
+
+      startTimer();
+      showQuestion();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById("timer-display").innerText = 
+          `⏱ Time Remaining: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      const qData = questions[currentQuestionIndex];
+      
+      document.getElementById("question-count").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+      document.getElementById("question-text").innerText = `${currentQuestionIndex + 1}. ${qData.q}`;
+      
+      const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      const selectedAns = userAnswers[currentQuestionIndex];
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = `${String.fromCharCode(65 + idx)}. ${opt}`;
+
+        if (selectedAns !== null) {
+          btn.disabled = true;
+          if (idx === qData.answer) {
+            btn.classList.add("correct");
+          } else if (idx === selectedAns) {
+            btn.classList.add("wrong");
+          }
+        } else {
+          btn.onclick = () => selectOption(idx);
+        }
+
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("prev-btn").style.visibility = currentQuestionIndex === 0 ? "hidden" : "visible";
+      document.getElementById("next-btn").style.visibility = currentQuestionIndex === questions.length - 1 ? "hidden" : "visible";
+
+      updateScoreTracker();
+    }
+
+    function selectOption(index) {
+      if (userAnswers[currentQuestionIndex] !== null) return;
+      userAnswers[currentQuestionIndex] = index;
+      showQuestion();
+    }
+
+    function changeQuestion(step) {
+      currentQuestionIndex += step;
+      showQuestion();
+    }
+
+    function updateScoreTracker() {
+      let score = 0;
+      userAnswers.forEach((ans, idx) => {
+        if (ans !== null && ans === questions[idx].answer) score++;
+      });
+      document.getElementById("score-tracker").innerText = `Score: ${score}`;
+    }
+
+    function showDialog(message, onConfirm, confirmText) {
+      const overlay = document.getElementById("dialog-overlay");
+      const yes = document.getElementById("dialog-yes");
+      const no = document.getElementById("dialog-no");
+      document.getElementById("dialog-message").textContent = message;
+      no.style.display = onConfirm ? "inline-block" : "none";
+      yes.textContent = confirmText || "OK";
+      overlay.style.display = "flex";
+      yes.onclick = () => { overlay.style.display = "none"; if (onConfirm) onConfirm(); };
+      no.onclick = () => { overlay.style.display = "none"; };
+    }
+
+    function confirmSubmit() {
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      showDialog(`Hello ${playerName}, you have answered ${answeredCount} of ${questions.length} questions in ${displaySubjName}. Submit test now?`, submitQuiz, "Yes, Submit");
+    }
+
+    function submitQuiz() {
+      clearInterval(timerInterval);
+
+      let score = 0;
+      userAnswers.forEach((ans, idx) => {
+        if (ans === questions[idx].answer) score++;
+      });
+
+      document.getElementById("quiz-screen").style.display = "none";
+      document.getElementById("score-screen").style.display = "block";
+
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      document.getElementById("stage-result-title").innerText = `Junior Class - ${displaySubjName}`;
+      document.getElementById("final-score").innerText = `${score} / ${questions.length}`;
+
+      let feedback = "";
+      const percent = (score / questions.length) * 100;
+
+      if (percent >= 90) {
+        feedback = `🌟 Exceptional performance, <strong>${playerName}</strong>! Mastery level in ${displaySubjName}!`;
+      } else if (percent >= 70) {
+        feedback = `👏 Great job, <strong>${playerName}</strong>! Very strong understanding of ${displaySubjName}!`;
+      } else if (percent >= 50) {
+        feedback = `👍 Good effort, <strong>${playerName}</strong>! You passed ${displaySubjName}, but keep practicing.`;
+      } else {
+        feedback = `📖 Keep studying <strong>${displaySubjName}</strong>, <strong>${playerName}</strong>, and give it another try!`;
+      }
+
+      document.getElementById("feedback-text").innerHTML = feedback;
+    }
+
+    function restartQuiz() {
+      document.getElementById("score-screen").style.display = "none";
+      document.getElementById("subject-screen").style.display = "block";
+    }
+  </script>
+</body>
+</html>
